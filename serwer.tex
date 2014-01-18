@@ -1,0 +1,118 @@
+\chapter{Część serwerowa aplikacji}
+
+Niniejszy rozdział opisuje sposób implementacji części serwerowej projektu RevCommunity. Przedstawiona zostanie warstwowa architektura projektu. Następnie przechodząc przez poszczególne warstwy omówimy technologie wykorzystane do realizacji tej części aplikacji. Postaramy się również przybliżyć najważniejsze elementy konfiguracji.
+
+\section{Architektura}
+Zdecydowaliśmy się na architekturę warstwową opartą na trzech poziomach:
+
+\begin{itemize}
+\item Warstwa prezentacji - odpowiada za przetworzenie zapytań klienta i wywołanie odpowiednich funkcji. Jej zadaniem jest konwersja danych przesłanych w formacie JSON na obiekty języka Java. Przetworzone dane wejściowe przekazujemy dalej do warstwy biznesowej, która zajmie się realizacją żądanych operacji. Na koniec rezultat wykonanych działań zwracamy w odpowiedniej formie do klienta.
+\item Warstwa logiki biznesowej - udostępnia funkcje pozwalające zarządzać stanem systemu. Definicje metod odnoszą się do kontekstu biznesowego i są odseparowane od sposobu realizacji ich zadań. Implementacja, która jest ukryta przed wyższymi warstwami, polega na grupowaniu funkcji dostępu do danych w logicznie powiązane sekwencje operacji wykonywane w obrębie jednej transakcji bazodanowej.
+\item Warstwa dostępu do danych - zapewnia komunikację z bazą danych. Interfejsy tej warstwy pozwalają wykonywać operacje CRUD na obiektach encyjnych.
+\end{itemize}
+
+Zależności między warstwami są hierarchiczne, oznacza to, że warstwa wyższa może korzystać wyłącznie z warstwy bezpośrednio niższej. 
+Schemat hierarchii warstw:
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=1]{images/warstwy_serwer.png}
+	\caption{Schemat hierarchii warstw}
+\end{figure}
+
+Powyższy schemat prezentuje wizualnie zależności między warstwami. Strzałki oznaczają kierunek komunikacji. Warstwa dostępu do danych jest najniżej położona i nie może korzystać z żadnej innej warstwy. Poziom logiki biznesowej korzysta z warstwy dostępu do danych w celu utrwalenia zmian logiki biznesowej. Warstwa prezentacji nie wie o istnieniu warstwy dostępu do danych i nie może się z nią komunikować. Korzysta wyłączenie z warstwy niższej, czyli logiki biznesowej.
+
+Dzięki takiej architekturze uzyskaliśmy separację grup funkcji co poprawia czytelność, przejrzystość i ułatwia zarządzanie projektem. Hierarchia zależności znacznie ułatwia wprowadzanie zmian w projekcie, ponieważ modyfikacja w jednej warstwie nie wpływa wszystkie pozostałe. Komunikacja między warstwami odbywa się za pośrednictwem interfejsów, a implementacja jest ukryta. Pozwala to na wykorzystanie konkretnych warstw w innych projektach.
+
+
+\section{Warstwa prezentacji}
+
+Do implementacji warstwy prezentacji wykorzystaliśmy Spring MVC. Jest to element Spring Framework pozwalający w wygodny sposób implementować obsługę zapytań HTTP do serwera. Głównym elementem mechanizmu jest DisptacherServlet do którego są kierowane wszystkie żądania pasujące do określonego wzorca. Definicję DisptacherServlet umieszczamy w pliku web.xml. Fragment reprezentujący konfigurację może wyglądać następująco:
+
+\begin{lstlisting}[frame=single,language=XML]
+<servlet>
+	<servlet-name>mvc-dispatcher</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>mvc-dispatcher</servlet-name>
+	<url-pattern>/rest/*</url-pattern>
+</servlet-mapping>
+\end{lstlisting}
+
+
+Jest to zwykła konfiguracja mapowania servletu. Sprawia ona, że każde żądanie zaczynające się od prefixu /rest/ wywoła DispatcherServlet. Zdaniem tego komponentu jest wykonanie odpowiedniej funkcji obsługującej wywołane zapytanie. Polega to na mapowaniu żądanego adresu URL do odpowiedniej klasy i metody. Wyszukiwanie dopasowania ogranicza się do klas oznaczonych adnotacją @Controller. Spring MVC filtruje tak oznaczone klasy, a następnie poszukuje adnotacji @RequestMapping zawierającej informację o mapowaniu URL na metodę lub klasę. Jeżeli oznaczymy naszą klasę adnotacją np. @RequestMapping(“/users”) to wszystkie mapowania metod w tej klasie będą zaczynały się od “/users”. Przypisując mapowanie do metody wzorzec dopasowania będzie połączeniem mapowania klasy i metody, czyli np. “/users/newest”. Możemy również zrezygnować z podawania wzorca przy funkcji, a zamiast tego dla rozróżnienia operacji określić metodę protokołu HTTP( POST ,GET, PUT, DELETE). Dzięki takiemu podejściu możemy wywołać zapytanie o takim samym URL, ale w zależności użytej metody HTTP wykona się inna operacja. 
+
+Kolejną przydaną funkcją Spring MVC jest bardzo szeroko konfigurowalne konwertowanie parametrów zapytań HTTP na obiekty języka Java. Klasy służące do obsługi zapytań nie muszą implementować żadnego interfejsu, ani rozszerzać żadnej klasy. Są to zwykłe klasy bez specjalnych wymagań poza oznaczeniem adnotacją @Controller. Zatem w metodach takiej klasy możemy umieścić argumenty dowolnego typu i przy minimalnej konfiguracji zmapować parametry zapytania HTTP na odpowiedni typ. Wybrana przez nas technologia udostępnia nam kilka możliwości realizacji mapowania parametrów. Mamy do dyspozycji m.in. następujące adnotacje:
+
+\begin{itemize}
+\item @RequestParam - umożliwia konwersję parametrów zapytania HTTP na proste typy Java
+\item @PathVariable - odczytuje parametry zapytania z adresu URL. Pozwala na zastosowanie schematu REST 
+\item @RequestBody - umożliwia mapowanie obiektu javascript na złożony obiekt Java. Wymaga odpowiedniego ustawienia nagłówków zapytania HTTP
+\end{itemize}
+
+Możemy również jako argument podać obiekt pewnej klasy bez żadnej adnotacji. W takim przypadku jeżeli nazwa pola tej klasy zgadza się z nazwą parametru zapytania to do tego pola wpisana zostanie wartość parametru. Bez umieszczania adnotacji możemy również podać pewne standardowe parametry np. HttpServletRequest, HttpServletResponse, czy HttpSession.
+
+W naszym projekcie zastosowaliśmy wzorzec REST do stworzenia struktury mapowań żądań HTTP na metody odpowiednich klasy. Wzorzec ten wprowadza pojęcie zasobu, który możemy jednoznacznie zidentyfikować poprzez powiązany z nim identyfikator. To podejście różni się od klasycznego tym, że parametry przekazujemy w adresie URL, a nie w treści zapytania. Wzorzec narzuca pewne zasady konstruowania API umożliwiającego zarządzanie zasobami. Adres URL rozpoczyna się od identyfikatora grupy zasobów np. “/users” określa, że będziemy operować na użytkownikach. Duże znaczenie mają metody protokołu HTTP, ponieważ każda będzie oznaczać inną operację. Jeżeli nie podaliśmy identyfikatora konkretnego zasobu(np. id użytkownika), czyli adres naszego zapytania to “/users”, to w zależności od metody HTTP powinny wykonać się następujące operacje:
+
+\begin{itemize}
+\item GET - pobiera listę wszystkich zasobów (np. listę użytkowników)
+\item POST - tworzy nowy zasób (np. nowego użytkownika)
+\item PUT - zastępuje wszystkie zasoby
+\item DELETE - usuwa wszystkie zasoby
+\end{itemize}
+
+Gdy do adresu dodamy identyfikator zasobu np. “users/23” będziemy odwoływać się do konkretnego zasobu i API powinno udostępniać metody:
+
+\begin{itemize}
+\item GET - pobranie zasobu o podanym id
+\item POST - traktuje wskazany zasób jako kolekcję i dodaje do niej przekazany jako parametr zasób
+\item PUT - modyfikacja zasobu
+\item DELETE - usunięcie zasobu
+\end{itemize}
+
+Oczywiście API nie ogranicza się tylko do powyżej opisanych metod. Prezentuje tylko podstawowe schematy mapowania żądań na operacje. Jeżeli np. na obiekcie użytkownika chcemy wykonać pewną specyficzną operacja np. go dezaktywować to możemy dodać po jego id, nazwę akcji która ma zostać wywołać na tym zasobie np.: “users/23/deactivate”. 
+W praktyce często między zasobami istnieją powiązania, do których również możemy się odwoływać w sposób zgodny ze architekturą REST. Przykładowo w projekcie RevCommunity mamy powiązania użytkowników(autorów) i recenzji. W celu pobrania listy recenzji danego autora możemy wywołać zapytanie “reviews/user/23”.
+Przy korzystaniu z architektury REST mogą pojawić się pewne problemy, gdy w zapytaniu HTTP chcemy przesłać wiele parametrów lub ich rozmiar jest bardzo duży. W takim przypadku wygenerowanie odpowiedniego URL może stać się dużo bardziej kłopotliwe niż zastosowanie standardowych parametrów lub przesłanie obiektu javascript w formacie JSON. Operacja wyszukiwania może posłużyć nam jako przykład, w którym lepsze okazuje się klasyczne podejście. W naszym systemie możemy wyszukiwać produkty podając ich specyficzne parametry np. producenta, wymiary, etc. Ilość parametrów po których będziemy filtrować wyniki nie jest ograniczona. Trudno sobie wyobrazić jak miałby wyglądać URL wygenerowany na podstawie takich parametrów pamiętając. Kolejną bardzo istotną sprawą jest fakt, iż długość adresu URL jest ograniczona w najpopularniejszych przeglądarkach do około 2000 znaków. Serwer do którego wysyłamy zapytanie również może mieć pewne limity długości zapytania. Dlatego wykorzystanie metody POST w tradycyjny sposób wydaje się być dużo lepszym rozwiązaniem. Oczywiście metoda POST również ma ograniczenia co do rozmiaru, jednak jest to wartość rzędu 2MB, którą dużo trudniej w praktyce przekroczyć.
+
+Spring MVC poza mapowaniem parametrów wejściowych zapytań HTTP umożliwia również konwersję zwracanych danych do różnych formatów, lub przekierowanie do odpowiedniego widoku. Warstwa widoku naszej aplikacji działa w sposób dynamiczny, czyli nie odświeżamy całej strony podczas przejścia między widokami, lecz zmieniamy dynamicznie wyświetlane treści. To znacznie ograniczyło wykorzystywanie przez nas przekierowań do widoków w kontrolerach, na rzecz konwersji danych do formatu JSON. Spring MVC pozwala na konwersję do wielu innych formatów m.in. XML, obraz, strumień bajtów, łańcuch znaków. Jednak nasze kontrolery zgodnie z ideą REST zwracają pewne zbiory danych(zasobów) bez informacji o wyglądzie tych danych(wygląd zaimplementowany jest w części klienckiej). Dobrym wyborem w takiej sytuacji wydaje się również XML jednak format JSON jest częścią języka javascript co znaczeni uprościło komunikację między serwerem, a klientem( część kliencka oparta jest głównie o język javascript).
+Czym tak naprawdę jest JSON? JSON(JavaScript Object Notation) jest to format służący do przechowywania i wymiany danych. Podobnie jak XML format JSON ma strukturę drzewiastą i jest wspierany przez technologię AJAX. Każdy z formatów ma wady i zalety. Format XML wymaga więcej miejsca, ze względu na znaczniki przy każdej wartości i znaczniki końcowe, jednak z drugiej strony zwiększa to czytelność dokumentu. Przykładowo mając długą listę elementów w dokumencie XML w dowolnym miejscu widzimy znacznik opisujący wartość, natomiast w JSON klucz widoczny jest tylko na początku listy. Jednak w dzisiejszych czasach przesyłamy coraz więcej danych, również między urządzeniami mobilnymi z mniejszymi możliwościami obliczeniowymi, więc rozmiar przesyłanych dokumentów ma duże znaczenie. JSON wydaje się również bardziej naturalny z uwagi na brak nadmiarowych informacji i łatwiejszy do ręcznego definiowania. 
+
+
+\section{Warstwa biznesowa}
+
+Na warstwę biznesową składa się szereg interfejsów pełniących rolę usług. Usługi pozwalają wykonywać wszystkie możliwe operacje na obiektach systemowych. Dzięki takiemu podejściu w warstwie wyższej, czyli warstwie prezentacji nie musimy wykonywać żadnych dodatkowych działań. Ponadto, w momencie pojawienia się potrzeby implementacji systemu na innych platformach np. PC, systemy mobilne, lub aplikacja oparta o webservice SOAP, moglibyśmy zastąpić obecną warstwę komunikacji inną zgodna z daną platformą bez zmiany niższych warstw.
+Interfejsy usług są podzielone w taki sposób, aby każdy udostępniał szereg operacji z pewnego logicznie powiązanego zakresu. Implementacja interfejsów nie jest bezpośrenio używana przez warstwę wyższą. Obecnie każdy interfejs implementowany jest przez jedną klasę. Jednak doszliśmy do wniosku, że interfejsy zapewnią większą elastyczność podczas rozbudowy projektu, oraz ułatwią tworzenie testów jednostkowych.
+Implementacja konkretnych usług polega na wykonaniu operacji, które zmienią jeden stan spójny systemu w drugi. Oznacza to, że wszystkie operacje bazodanowe powinny operować na tej samej transakcji w ramach jednej metody implementującej usługę. W tym miejscu pojawiło się pytanie - jako stworzyć elastyczny mechanizm zarządzania transakcjami bez konieczności umieszczania w każdej metody powtarzającego się schematu otwierającego i zamykającego transakcję bazodanową. Z pomocą kolejny raz przychodzi pakiet Spring. Przy minimalnej konfiguracji wystarczy oznaczyć klasę za pomocą @Service, a metodę implementującą usługę adnotacją @Trasnactional i możemy korzystać z dobrodziejstw transakcji nie martwiąc się o ich rozpoczęcie i zakończenie. Wewnątrz metod usług możemy wywoływać funkcje interfejsów Repository(warstwa dostępu do danych) jak i funkcje innych usług, nie podając przy tym jako argumentu obiektu transakcji. Podczas wykonywania operacji bazodanowych menadżer transakcji sprawdza czy w obecnym wątku istnieje już otwarta transakcja, jeżeli tak to nie otwiera nowej tylko korzysta z już istniejącej, a jeżeli nie to rozpoczyna nową transakcję, która będzie wykorzystywana do momentu wyjścia z metody w której transakcja została utworzona. Jest to oczywiście najprostsza sytuacja, ponieważ adnotacja @Transactional pozwala na bardziej zaawansowane zarządzanie transakcjami. Mechanizm umożliwia nam np. określenie pewnych metod jako wymagających nowej transakcji, lub ustawienie flagi transakcji tylko do odczytu(w celu optymalizacji). Możemy również określić limit czasu trwania transakcji, oraz dla jakich typów błędów transakcję należy wycofać. 
+Kolejną ważną cechą klas usług jest możliwość wywoływania różnych zdarzeń podczas wykonywania operacji. Przykładem wykorzystania tej zalety jest wysyłanie powiadomień o subskrypcjach recenzentów i obserwowanych produktach. Wysyłanie powiadomień zostaje uruchomione w momencie dodania produktu lub recenzji. Wywołanie tych operacji wystarczyło dodać tylko w jednym miejscu projektu.
+
+\section{Warstwa dostępu do danych}
+
+Poza zarządzaniem transakcjami framework Spring oddaje do naszej dyspozycji technologie zwalniające programistę z konieczności implementacji operacji CRUD, a także znacząco upraszcza implementację bardziej zaawansowanych operacji np. wyszukiwania. Technologie z których skorzystaliśmy do implementacji warstwy dostępu do danych należą do grupy modułów Spring Data. Projekty te mają na celu uproszczenie i dostarczenie wsparcia dla obsługi zarządzania różnymi technologiami bazodanowymi m.in. JPA, MongoDB, Neo4j. My korzystamy oczywiście z projektu dotyczącego Neo4j.
+
+Architektura tej warstwy składa się z dwóch głównych elementów. Pierwszym z nich jest zbiór klas encyjnych, które są mapowane na węzły i relacje grafowej bazy danych. Drugim jest szereg interfejsów udostępniających operacje bazodanowe. Co ciekawe w ogóle nie było konieczności implementacji tych interfejsów, ponieważ pakiet Spring Data zaimplementował za nas podstawowe operacje. Zacznijmy od sposobu mapowania obiektów języka Java na obiekty bazodanowe. Cała konfiguracja opiera się na adnotacjach dzięki temu nasze klasy mogą posiadać logikę biznesową, oraz mogą posłużyć jako obiekty wymiany danych między klientem, a serwerem. Klasy możemy mapować jako węzły grafu lub jako relację, w zależności od ich roli. Do mapowania węzłów używamy adnotacji @NodeEntity, natomiast do mapowania relacji @RelationshipEntity. Wszystkie pola typów prostych tak oznaczonych klas są zapisywane w bazie danych w sposób analogiczny do kolumn w relacyjnych bazach danych. Jeżeli chcemy zmapować relację między dwoma klasami @NodeEntity należy pole odzwierciedlające powiązanie oznaczyć za pomocą @RelatedTo. Adnotacja ta pozwala zdefiniować nazwę relacji przydatną przy tworzeniu zapytań, oraz kierunek połączenia. Jeżeli chcemy, aby pewne powiązania posiadały dodatkowe informacje, zamiast używania @RelatedTo tworzymy nową klasę i oznaczamy ją adnotacją @RelationshipEntity. W tym przypadku należy oznaczyć przez @StartNode i @EndNode odpowiednio początkowy i końcowy węzeł grafu. Dodatkowo każdy węzeł i każda relacja musi posiadać unikalny identyfikator(zazwyczaj generowany automatycznie) zapisywany do pola oznaczonego przez @GraphId. 
+
+Wstawić schemat bazy danych
+
+Gdy zamodelowaliśmy już nasze obiekty bazodanowe przydadzą się nam elementy umożliwiające wykonywanie operacji na tych obiektach. Dlatego stworzyliśmy szereg interfejsów pozwalających zarządzać naszymi encjami. Do tego celu wykorzystaliśmy pakiet Spring Data. Jego zadaniem jest znaczne zredukowanie powtarzającego się kodu implementującego warstwę dostępu do danych. Moduł udostępnia mechanizmy, które w sposób dynamiczny implementują stworzone przez nas interfejsy. Aby korzystać z udogodnień pakietu musimy rozszerzyć dostarczony przez Spring Data generyczny interfejs GraphRepository. Jako parametr generyczny podajemy klasę encji, na której będziemy operować. I od razu możemy wykonywać podstawowe operacji tj. zapis, odczyt, modyfikacji, czy proste wyszukiwanie. Dodatkowo możemy dodać do interfejsu definicje metod wykonujących bardziej konkretne zadania poprzez odpowiednią konstrukcję ich nazw. Spring wykorzystuje mechanizm refleksji do wygenerowania zapytania na podstawie nazwy metody, jej parametrów i definicji klasy, którą przekazaliśmy jako parametr generyczny do interfejsu GraphRepository. Spójrzmy na przykład(fragment UserRepo):
+
+User findByUserName( String userName );
+
+Powyższa metoda pozwoli nam pobrać obiekt użytkownika o podanej nazwie. Mechanizm budujący zapytanie odnajduje wzorzec findBy po którym występuje nazwa pola klasy, której dotyczy interfejs. Następnie sprawdza, czy argument metody jest tego samego typu co pole userName klasy User. Jeżeli w klasie User nie byłoby pola userName lub jego typ nie zgadzałby się z typem argumentu to podczas uruchamiania systemu rzucony zostałby wyjątek. 
+Nazwy metod mogą wykorzystywać bardziej złożone wzorce pozwalające na zdefiniowanie wielu pól po których chcemy wyszukiwać. Warunki dotyczące pól możemy łączyć operatorami logicznymi AND i OR.  Możemy również ustawić pewne opcje dodatkowe tj. ignorowanie wielkości znaków, czy usunięcie duplikatów ze zbioru wyników. Dodając suffix Asc lub Desc określamy sortowanie elementów. Bardziej rozbudowany przykład mógłby wyglądać następująco:
+
+List<User> findDistinctByUserNameOrLastNameIgnoreCaseDesc( String userName,String lastName );
+
+Taka metoda wygeneruje zapytanie pobierające użytkowników o podanym loginie lub nazwisku, z wykluczeniem duplikatów(słowo distinct) posortowanych malejąco i przy porównywaniu nazwiska zostanie pominięta wielkość znaków. 
+Poza tworzeniem zapytań poprzez nazwy metod możemy również wykorzystać natywne zapytanie bazodanowe. Co prawda takie podejście bardziej uzależnia nas od wybranej technologii, jednak w naszym przypadku system bazuje na zapytaniach korzystających ze specyficznych możliwości grafowej bazy danych. Metody wykonujące zapytania również możemy umieszczać w definicji interfejsu. Jedną rzeczą, która należy wykonać to oznaczyć metodę adnotacją @Query i wpisać w niej treść zapytania. Do zapytania możemy oczywiście wprowadzać parametry, które zostaną pobrane z definicji metody. Językiem w którym będziemy komunikować się z bazą danych Neo4j jest Cypher. 
+Czy tu opisać składnie języka Cypher?
+
+Przejdźmy do przykładu:
+
+@Query( "START parent=node({0}) MATCH parent-[:CONTAINS]->children RETURN children" )
+List<AbstractCategory> getChildren( AbstractCategory parent );
+
+
+Jako parametr podaliśmy kategorie dla której chcemy znaleźć kategorie podrzędne(dzieci). Podany argument jest naszym miejscem zaczepienia w grafie od którego rozpocznie się dopasowanie. Klauzula MATCH odpowiada za definicje relacji między węzłami biorącymi udział w dopasowaniu. Słowo kluczowe RETRUN określa, który ze zdefiniowanych elementów chcemy otrzymać jako wynik zapytania. Najciekawsza tutaj jest klauzula MATCH. To ona wprowadza abstrakcję grafu i odróżnia zapytanie od np. języka SQL. Fragment zawarty między MATCH, a RETURN określa, to że szukamy dopasowania między węzłem parent(podanym jako parametr) a węzłami połączonymi z nim  jednokierunkową wychodzącą relacją o nazwie CONTAINS. 
