@@ -6,7 +6,7 @@ Niniejszy rozdział opisuje sposób implementacji części serwerowej projektu R
 Zdecydowaliśmy się na architekturę warstwową opartą na trzech poziomach:
 
 \begin{itemize}
-\item Warstwa prezentacji - odpowiada za przetworzenie zapytań klienta i wywołanie odpowiednich funkcji. Jej zadaniem jest konwersja danych przesłanych w formacie JSON na obiekty języka Java. Przetworzone dane wejściowe przekazujemy dalej do warstwy biznesowej, która zajmie się realizacją żądanych operacji. Na koniec rezultat wykonanych działań zwracamy w odpowiedniej formie do klienta.
+\item Warstwa komunikacji - odpowiada za przetworzenie zapytań klienta i wywołanie odpowiednich funkcji. Jej zadaniem jest konwersja danych przesłanych w formacie JSON na obiekty języka Java. Przetworzone dane wejściowe przekazujemy dalej do warstwy biznesowej, która zajmie się realizacją żądanych operacji. Na koniec rezultat wykonanych działań zwracamy w odpowiedniej formie do klienta.
 \item Warstwa logiki biznesowej - udostępnia funkcje pozwalające zarządzać stanem systemu. Definicje metod odnoszą się do kontekstu biznesowego i są odseparowane od sposobu realizacji ich zadań. Implementacja, która jest ukryta przed wyższymi warstwami, polega na grupowaniu funkcji dostępu do danych w logicznie powiązane sekwencje operacji wykonywane w obrębie jednej transakcji bazodanowej.
 \item Warstwa dostępu do danych - zapewnia komunikację z bazą danych. Interfejsy tej warstwy pozwalają wykonywać operacje CRUD na obiektach encyjnych.
 \end{itemize}
@@ -20,19 +20,21 @@ Schemat hierarchii warstw:
 	\caption{Schemat hierarchii warstw}
 \end{figure}
 
-Powyższy schemat prezentuje wizualnie zależności między warstwami. Strzałki oznaczają kierunek komunikacji. Warstwa dostępu do danych jest najniżej położona i nie może korzystać z żadnej innej warstwy. Poziom logiki biznesowej korzysta z warstwy dostępu do danych w celu utrwalenia zmian logiki biznesowej. Warstwa prezentacji nie wie o istnieniu warstwy dostępu do danych i nie może się z nią komunikować. Korzysta wyłączenie z warstwy niższej, czyli logiki biznesowej.
+Powyższy schemat prezentuje wizualnie zależności między warstwami. Strzałki oznaczają kierunek komunikacji. Warstwa dostępu do danych jest najniżej położona i nie może korzystać z żadnej innej warstwy. Poziom logiki biznesowej korzysta z warstwy dostępu do danych w celu utrwalenia zmian logiki biznesowej. Warstwa komunikacji nie wie o istnieniu warstwy dostępu do danych i nie może się z nią komunikować. Korzysta wyłączenie z warstwy niższej, czyli logiki biznesowej.
 
 Dzięki takiej architekturze uzyskaliśmy separację grup funkcji co poprawia czytelność, przejrzystość i ułatwia zarządzanie projektem. Hierarchia zależności znacznie ułatwia wprowadzanie zmian w projekcie, ponieważ modyfikacja w jednej warstwie nie wpływa wszystkie pozostałe. Komunikacja między warstwami odbywa się za pośrednictwem interfejsów, a implementacja jest ukryta. Pozwala to na wykorzystanie konkretnych warstw w innych projektach.
 
 
-\section{Warstwa prezentacji}
+\section{Warstwa komunikacji}
 
-Do implementacji warstwy prezentacji wykorzystaliśmy Spring MVC. Jest to element Spring Framework pozwalający w wygodny sposób implementować obsługę zapytań HTTP do serwera. Głównym elementem mechanizmu jest DisptacherServlet do którego są kierowane wszystkie żądania pasujące do określonego wzorca. Definicję DisptacherServlet umieszczamy w pliku web.xml. Fragment reprezentujący konfigurację może wyglądać następująco:
+Do implementacji warstwy komunikacji wykorzystaliśmy Spring MVC. Jest to element Spring Framework pozwalający w wygodny sposób implementować obsługę zapytań HTTP do serwera. Głównym elementem mechanizmu jest DisptacherServlet do którego są kierowane wszystkie żądania pasujące do określonego wzorca. Definicję DisptacherServlet umieszczamy w pliku web.xml. Fragment reprezentujący konfigurację może wyglądać następująco:
 
-\begin{lstlisting}[frame=single,language=XML]
+\begin{lstlisting}[language=XML,caption=Konfiguracja DispatcherServlet]
 <servlet>
 	<servlet-name>mvc-dispatcher</servlet-name>
-	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<servlet-class>
+		org.springframework.web.servlet.DispatcherServlet
+	</servlet-class>
 	<load-on-startup>1</load-on-startup>
 </servlet>
 
@@ -80,10 +82,30 @@ Przy korzystaniu z architektury REST mogą pojawić się pewne problemy, gdy w z
 Spring MVC poza mapowaniem parametrów wejściowych zapytań HTTP umożliwia również konwersję zwracanych danych do różnych formatów, lub przekierowanie do odpowiedniego widoku. Warstwa widoku naszej aplikacji działa w sposób dynamiczny, czyli nie odświeżamy całej strony podczas przejścia między widokami, lecz zmieniamy dynamicznie wyświetlane treści. To znacznie ograniczyło wykorzystywanie przez nas przekierowań do widoków w kontrolerach, na rzecz konwersji danych do formatu JSON. Spring MVC pozwala na konwersję do wielu innych formatów m.in. XML, obraz, strumień bajtów, łańcuch znaków. Jednak nasze kontrolery zgodnie z ideą REST zwracają pewne zbiory danych(zasobów) bez informacji o wyglądzie tych danych(wygląd zaimplementowany jest w części klienckiej). Dobrym wyborem w takiej sytuacji wydaje się również XML jednak format JSON jest częścią języka javascript co znaczeni uprościło komunikację między serwerem, a klientem( część kliencka oparta jest głównie o język javascript).
 Czym tak naprawdę jest JSON? JSON(JavaScript Object Notation) jest to format służący do przechowywania i wymiany danych. Podobnie jak XML format JSON ma strukturę drzewiastą i jest wspierany przez technologię AJAX. Każdy z formatów ma wady i zalety. Format XML wymaga więcej miejsca, ze względu na znaczniki przy każdej wartości i znaczniki końcowe, jednak z drugiej strony zwiększa to czytelność dokumentu. Przykładowo mając długą listę elementów w dokumencie XML w dowolnym miejscu widzimy znacznik opisujący wartość, natomiast w JSON klucz widoczny jest tylko na początku listy. Jednak w dzisiejszych czasach przesyłamy coraz więcej danych, również między urządzeniami mobilnymi z mniejszymi możliwościami obliczeniowymi, więc rozmiar przesyłanych dokumentów ma duże znaczenie. JSON wydaje się również bardziej naturalny z uwagi na brak nadmiarowych informacji i łatwiejszy do ręcznego definiowania. 
 
+\begin{lstlisting}[language=json,caption=Przykład użycia formatu JSON]
+{
+    extend: 'Ext.data.Model',
+    fields: [
+          'channel',
+          'notification',
+          {
+          	name:'product',
+          	mapping:'channel.channelProduct'
+          }
+         
+    ],
+    idProperty:'extid',
+    proxy: {
+        type: 'rest',
+        url : 'rest/subscriptions/products/notifications'
+    }
+}
+\end{lstlisting}
+
 
 \section{Warstwa biznesowa}
 
-Na warstwę biznesową składa się szereg interfejsów pełniących rolę usług. Usługi pozwalają wykonywać wszystkie możliwe operacje na obiektach systemowych. Dzięki takiemu podejściu w warstwie wyższej, czyli warstwie prezentacji nie musimy wykonywać żadnych dodatkowych działań. Ponadto, w momencie pojawienia się potrzeby implementacji systemu na innych platformach np. PC, systemy mobilne, lub aplikacja oparta o webservice SOAP, moglibyśmy zastąpić obecną warstwę komunikacji inną zgodna z daną platformą bez zmiany niższych warstw.
+Na warstwę biznesową składa się szereg interfejsów pełniących rolę usług. Usługi pozwalają wykonywać wszystkie możliwe operacje na obiektach systemowych. Dzięki takiemu podejściu w warstwie wyższej, czyli warstwie komunikacji nie musimy wykonywać żadnych dodatkowych działań. Ponadto, w momencie pojawienia się potrzeby implementacji systemu na innych platformach np. PC, systemy mobilne, lub aplikacja oparta o webservice SOAP, moglibyśmy zastąpić obecną warstwę komunikacji inną zgodna z daną platformą bez zmiany niższych warstw.
 Interfejsy usług są podzielone w taki sposób, aby każdy udostępniał szereg operacji z pewnego logicznie powiązanego zakresu. Implementacja interfejsów nie jest bezpośrenio używana przez warstwę wyższą. Obecnie każdy interfejs implementowany jest przez jedną klasę. Jednak doszliśmy do wniosku, że interfejsy zapewnią większą elastyczność podczas rozbudowy projektu, oraz ułatwią tworzenie testów jednostkowych.
 Implementacja konkretnych usług polega na wykonaniu operacji, które zmienią jeden stan spójny systemu w drugi. Oznacza to, że wszystkie operacje bazodanowe powinny operować na tej samej transakcji w ramach jednej metody implementującej usługę. W tym miejscu pojawiło się pytanie - jako stworzyć elastyczny mechanizm zarządzania transakcjami bez konieczności umieszczania w każdej metody powtarzającego się schematu otwierającego i zamykającego transakcję bazodanową. Z pomocą kolejny raz przychodzi pakiet Spring. Przy minimalnej konfiguracji wystarczy oznaczyć klasę za pomocą @Service, a metodę implementującą usługę adnotacją @Trasnactional i możemy korzystać z dobrodziejstw transakcji nie martwiąc się o ich rozpoczęcie i zakończenie. Wewnątrz metod usług możemy wywoływać funkcje interfejsów Repository(warstwa dostępu do danych) jak i funkcje innych usług, nie podając przy tym jako argumentu obiektu transakcji. Podczas wykonywania operacji bazodanowych menadżer transakcji sprawdza czy w obecnym wątku istnieje już otwarta transakcja, jeżeli tak to nie otwiera nowej tylko korzysta z już istniejącej, a jeżeli nie to rozpoczyna nową transakcję, która będzie wykorzystywana do momentu wyjścia z metody w której transakcja została utworzona. Jest to oczywiście najprostsza sytuacja, ponieważ adnotacja @Transactional pozwala na bardziej zaawansowane zarządzanie transakcjami. Mechanizm umożliwia nam np. określenie pewnych metod jako wymagających nowej transakcji, lub ustawienie flagi transakcji tylko do odczytu(w celu optymalizacji). Możemy również określić limit czasu trwania transakcji, oraz dla jakich typów błędów transakcję należy wycofać. 
 Kolejną ważną cechą klas usług jest możliwość wywoływania różnych zdarzeń podczas wykonywania operacji. Przykładem wykorzystania tej zalety jest wysyłanie powiadomień o subskrypcjach recenzentów i obserwowanych produktach. Wysyłanie powiadomień zostaje uruchomione w momencie dodania produktu lub recenzji. Wywołanie tych operacji wystarczyło dodać tylko w jednym miejscu projektu.
@@ -98,12 +120,17 @@ Wstawić schemat bazy danych
 
 Gdy zamodelowaliśmy już nasze obiekty bazodanowe przydadzą się nam elementy umożliwiające wykonywanie operacji na tych obiektach. Dlatego stworzyliśmy szereg interfejsów pozwalających zarządzać naszymi encjami. Do tego celu wykorzystaliśmy pakiet Spring Data. Jego zadaniem jest znaczne zredukowanie powtarzającego się kodu implementującego warstwę dostępu do danych. Moduł udostępnia mechanizmy, które w sposób dynamiczny implementują stworzone przez nas interfejsy. Aby korzystać z udogodnień pakietu musimy rozszerzyć dostarczony przez Spring Data generyczny interfejs GraphRepository. Jako parametr generyczny podajemy klasę encji, na której będziemy operować. I od razu możemy wykonywać podstawowe operacji tj. zapis, odczyt, modyfikacji, czy proste wyszukiwanie. Dodatkowo możemy dodać do interfejsu definicje metod wykonujących bardziej konkretne zadania poprzez odpowiednią konstrukcję ich nazw. Spring wykorzystuje mechanizm refleksji do wygenerowania zapytania na podstawie nazwy metody, jej parametrów i definicji klasy, którą przekazaliśmy jako parametr generyczny do interfejsu GraphRepository. Spójrzmy na przykład(fragment UserRepo):
 
+\begin{lstlisting}[language=Java]
 User findByUserName( String userName );
+\end{lstlisting}
 
 Powyższa metoda pozwoli nam pobrać obiekt użytkownika o podanej nazwie. Mechanizm budujący zapytanie odnajduje wzorzec findBy po którym występuje nazwa pola klasy, której dotyczy interfejs. Następnie sprawdza, czy argument metody jest tego samego typu co pole userName klasy User. Jeżeli w klasie User nie byłoby pola userName lub jego typ nie zgadzałby się z typem argumentu to podczas uruchamiania systemu rzucony zostałby wyjątek. 
 Nazwy metod mogą wykorzystywać bardziej złożone wzorce pozwalające na zdefiniowanie wielu pól po których chcemy wyszukiwać. Warunki dotyczące pól możemy łączyć operatorami logicznymi AND i OR.  Możemy również ustawić pewne opcje dodatkowe tj. ignorowanie wielkości znaków, czy usunięcie duplikatów ze zbioru wyników. Dodając suffix Asc lub Desc określamy sortowanie elementów. Bardziej rozbudowany przykład mógłby wyglądać następująco:
 
-List<User> findDistinctByUserNameOrLastNameIgnoreCaseDesc( String userName,String lastName );
+\begin{lstlisting}[language=Java]
+List<User> findDistinctByUserNameOrLastNameIgnoreCaseDesc(
+			 String userName,String lastName );
+\end{lstlisting}
 
 Taka metoda wygeneruje zapytanie pobierające użytkowników o podanym loginie lub nazwisku, z wykluczeniem duplikatów(słowo distinct) posortowanych malejąco i przy porównywaniu nazwiska zostanie pominięta wielkość znaków. 
 Poza tworzeniem zapytań poprzez nazwy metod możemy również wykorzystać natywne zapytanie bazodanowe. Co prawda takie podejście bardziej uzależnia nas od wybranej technologii, jednak w naszym przypadku system bazuje na zapytaniach korzystających ze specyficznych możliwości grafowej bazy danych. Metody wykonujące zapytania również możemy umieszczać w definicji interfejsu. Jedną rzeczą, która należy wykonać to oznaczyć metodę adnotacją @Query i wpisać w niej treść zapytania. Do zapytania możemy oczywiście wprowadzać parametry, które zostaną pobrane z definicji metody. Językiem w którym będziemy komunikować się z bazą danych Neo4j jest Cypher. 
@@ -111,8 +138,10 @@ Czy tu opisać składnie języka Cypher?
 
 Przejdźmy do przykładu:
 
-@Query( "START parent=node({0}) MATCH parent-[:CONTAINS]->children RETURN children" )
+\begin{lstlisting}[language=Java]
+@Query( "START parent=node({0}) 
+MATCH parent-[:CONTAINS]->children RETURN children" )
 List<AbstractCategory> getChildren( AbstractCategory parent );
-
+\end{lstlisting}
 
 Jako parametr podaliśmy kategorie dla której chcemy znaleźć kategorie podrzędne(dzieci). Podany argument jest naszym miejscem zaczepienia w grafie od którego rozpocznie się dopasowanie. Klauzula MATCH odpowiada za definicje relacji między węzłami biorącymi udział w dopasowaniu. Słowo kluczowe RETRUN określa, który ze zdefiniowanych elementów chcemy otrzymać jako wynik zapytania. Najciekawsza tutaj jest klauzula MATCH. To ona wprowadza abstrakcję grafu i odróżnia zapytanie od np. języka SQL. Fragment zawarty między MATCH, a RETURN określa, to że szukamy dopasowania między węzłem parent(podanym jako parametr) a węzłami połączonymi z nim  jednokierunkową wychodzącą relacją o nazwie CONTAINS. 

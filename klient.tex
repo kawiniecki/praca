@@ -11,7 +11,7 @@ Część kliencka naszej aplikacji została oparta o javascriptowy framwork Ext 
 \section{Warstwa modelu}
 
 Definiuje klasy będące odwzorowaniem klas języka Java, które otrzymujemy w odpowiedzi od serwera. W klasach modelu wykonujemy konwersję surowych danych do czytelnego formatu jeżeli jest taka potrzeba. Na tym poziomie możemy również wprowadzić walidację pól. Ext JS wspiera architekturę REST dzięki temu w klasach modelu podając adres URL do zasobów otrzymamy gotowe funkcje zapisu, odczytu, modyfikacji i usuwania danych. Przeanalizujmy przykład z naszego projektu:
-
+\begin{lstlisting}[language=json]
 Ext.define('RevCommunity.model.Category', {
     extend: 'Ext.data.Model',
     fields: [
@@ -25,14 +25,16 @@ Ext.define('RevCommunity.model.Category', {
         url : 'rest/categories'
     }
 });
-
+\end{lstlisting}
 
 Powyższy kod implementuje klasę modelu Category. Dzięki definicji obiektu proxy zarządzanie naszymi danymi staje się banalnie proste. Przykładowo w celu zapisania nowej kategorii wystarczy:
 
+\begin{lstlisting}[language=json]
 var category = Ext.create('Category', {name: 'Komputery'});
 
-category.save(); // wywołanie zapytania metodą POST pod adres 'rest/categories'
-// treść zapytania to definicja obiektu kategorii w formacie JSON
+category.save(); // wywolanie zapytania metoda POST pod adres 'rest/categories'
+// tresc zapytania to definicja obiektu kategorii w formacie JSON
+\end{lstlisting}
 
 Jeżeli wykonamy metodę save na obiekcie, który posiada już przypisany identyfikator(w naszym przypadku pole nodeId), to metodą zapytania będzie PUT.
 Do dyspozycji mamy również metody destroy(usuwanie elementu), oraz load(pobieranie elemntu).
@@ -44,13 +46,15 @@ Klasy Store pozwalają również filtrować i sortować dane.
 
 Na widok aplikacji składają się komponenty graficzne tj. panele, tabele, drzewa i formularze. Biblioteka pozwala nam rozszerzać komponenty graficzne tworząc własne, dzięki temu możemy je dostosować do własnych potrzeb i wykorzystywać w wielu miejscach(również w innych aplikacjach). Bardzo przydatnym elementem Ext JS jest mechanizm szablonów(Ext.XTemplate). Pozwala on tworzyć wygląd komponentów z wykorzystaniem języka HTML i specjalnych znaczników framework'a Ext JS. Zazwyczaj szablony służą do definicji wyglądu list elementów. Komponent, w którym używamy szablonu wiążemy z konkretnym modelem. Gdy spróbujemy załadować dane do komponentu model wywoła odpowiednie zapytanie do serwera w celu pobrania danych. Następnie zwrócona kolekcja zostanie przetworzona przez szablon. W szablonie możemy odwoływać się do pól modelu, iterować po kolekcjach elementów, oraz wykorzystywać warunki logiczne. Spójrzmy na prosty przykład szablonu listy subskrybowanych użytkowników:
  
-
+\begin{lstlisting}[language=HTML]
 <p class="rev-header">Subskrupcje</p>
 <tpl for=".">
     <div class="rev-user-subscription-item">
-      <img src="{user.image}" width="18"/><span>{user.fullName} ({newNotifications})</span>
+      <img src="{user.image}" width="18"/>
+      <span>{user.fullName} ({newNotifications})</span>
     </div>
 </tpl>
+\end{lstlisting}
 
 Widok naszego komponentu w całości definiuje powyższy szablon. Zaczynamy od wstawienia nagłówka "Subskrypcje" jako zwykły paragraf HTML. Niżej widzimy znacznik 'tpl', który udostępnia rozszerzenia szablonów. W tym przypadku będziemy iterować po kolekcji elementów załadowanej do komponentu. Następnie mamy definicje elementów HTML zawierających znaczniki odwołujące się do pól modelu. Jednym z pól modelu jest obiekt user. Możemy odwoływać się do jego właściwości poprzez znak '.'. W połączeniu z definicją stylów CSS otrzymujemy następujący efekt:
 
@@ -61,12 +65,17 @@ Widok naszego komponentu w całości definiuje powyższy szablon. Zaczynamy od w
 
 Aby nasza aplikacja zaczęła "żyć" musimy zdefiniować zachodzące w nie zdarzenia i ich obsługę. Do tego służą kontrolery. Są to klasy w których umieszczamy instrukcję w typu: gdy na komponencie ... wydarzy się ... wykonaj ... . Przykładowo w kontrolerach umieszczamy obsługę kliknięć przycisków, zdarzeń załadowania danych, lub edycji pól formularzy. Ciekawy jest sposób wiązania komponentu z funkcją obsługi zdarzenia. Pierwszą istotną rzeczą, którą musimy wykonać to zidentyfikowanie komponentu dla którego będziemy definiować zdarzenie. Do tego celu wykorzystujemy mechanizm Ext Js - ComponentQuery. Jest to język zapytań pozwalający na wyszukiwanie komponentów na podstawie aliasów, identyfikatorów, powiązań z innymi komponentami, oraz wartości ich atrybutów. Każda klasa powinna posiadać unikalny w ramach aplikacji alias. Alias ten upraszcza tworzenie obiektów danej klasy(nie musimy podawać pełnej nazwy klasy), oraz znacznie ułatwia tworzenie zapytań. Spójrzmy na przykład: 
 
+\begin{lstlisting}[language=json]
 revhtmleditor  > toolbar button[action=addVideoWin]
+\end{lstlisting}
 
 Zapytanie zostanie przetworzone w następujący sposób:
-•	wyszukanie wszystkich komponentów na stronie posiadających alias 'revhtmleditor'
-•	wśród bezpośrednich dzieci znalezionych wcześniej komponentów wybierzemy tylko elementy typu toolbar ( gdyby nie znak '>' wyszukiwanie zagłębiałoby się rekurencyjnie)
-•	w znalezionych toolbar'ach szukamy tylko przycisków, mających atrybut action ustawiony na wartość addVideoWin
+
+\begin{itemize}
+\item wyszukanie wszystkich komponentów na stronie posiadających alias 'revhtmleditor'
+\item wśród bezpośrednich dzieci znalezionych wcześniej komponentów wybierzemy tylko elementy typu toolbar ( gdyby nie znak '>' wyszukiwanie zagłębiałoby się rekurencyjnie)
+\item w znalezionych toolbar'ach szukamy tylko przycisków, mających atrybut action ustawiony na wartość addVideoWin
+\end{itemize}
 
 Tak elastyczny mechanizm wyszukiwania pozwala znaleźć każdy komponent.
 Kolejnym krokiem jest wybranie zdarzenia dla znalezionego komponentu. Ext Js określił dla każdego komponentu wyczerpującą listę dostępnych zdarzeń. Naszym zadaniem jest ich przypisanie do funkcji javascriptowych i implementacji obsługi.
