@@ -14,7 +14,7 @@ Zdecydowaliśmy się na architekturę warstwową opartą na trzech poziomach:
 Zależności między warstwami są hierarchiczne, oznacza to, że warstwa wyższa może korzystać wyłącznie z warstwy bezpośrednio niższej. 
 Schemat hierarchii warstw:
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=1]{images/warstwy_serwer.png}
 	\caption{Schemat hierarchii warstw}
@@ -150,7 +150,7 @@ Jako parametr podaliśmy kategorie dla której chcemy znaleźć kategorie podrz�
 
 Dostęp do systemu RevCommunity został zabezpieczony przy użyciu platformy Spring Security. Platforma ta umożliwia uwierzytelnianie oraz autoryzację użytkowników w systemie. Dodatkowo Spring Security umożliwia modelowanie uprawnień dla grup zdefiniowanych w systemie.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.7]{images/spring_diagram.jpg}
 	\caption{Schemat procedury uwierzytelnienia oraz autoryzacji w platformie Spring Security}
@@ -170,10 +170,10 @@ Model uprawnień został zdefiniowany w pliku konfiguracyjnym SpringSecurity. Za
 \item Administratorów
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.7]{images/hierarchia_uprawnien.png}
-	\caption{Hierarchię uprawnień pomiędzy użytkownikami}
+	\includegraphics[scale=0.5]{images/hierarchia_uprawnien.png}
+	\caption{Hierarchia uprawnień pomiędzy użytkownikami}
 \end{figure}
 
 Na diagramie widać, że uprawnienia są dziedziczone. Użytkownicy niezalogowani posiadają swoją określoną pulę uprawnień. Użytkownicy zarejestrowani posiadają tą samą grupę uprawnień co użytkownicy nie zalogowani oraz dodatkową pule uprawnień nie dostępną dla użytkowników nie zarejestrowanych. Przykładem takiego uprawnienia może być między inny możliwość dodawania i oceniania recenzji. Administrator natomiast posiada wszystkie uprawnienia dostępne w systemie. Dodatkowymi możliwościami w przypadku administratora, które nie są dostępne dla zarejestrowanego użytkownika, są między innymi:
@@ -184,7 +184,7 @@ Na diagramie widać, że uprawnienia są dziedziczone. Użytkownicy niezalogowan
 \item Uruchomienie importu danych z zewnętrznego serwisu
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.7]{images/model_uprawnien_xml.png}
 	\caption{Przykładowe wpisy zawarte w pliku konfiguracyjnym}
@@ -202,7 +202,7 @@ Powyższy fragment pliku konfiguracyjnego przedstawia uprawnienia do poszczegól
 Kolejne dwie linie (3 oraz 4) dotyczą użytkowników zarejestrowanych. Oznaczają one, że ci użytkownicy mają dostęp do wszystkich zasobów oraz usług, które są związane z komentarzami oraz subskrypcjami.
 Ostatnia linia (linia numer 5), definiuje uprawnienia użytkowników należących do grupy administratorów. Oznacza ona, że mają oni dostęp do wszystkich zasobów i usług serwisu.
 
-Przedstawione nazwy grup, są grupami domyślnymi w platformie Spring Security. Oznacza to, że nie musimy definiować dziedziczenia uprawnień pomiędzy nimi. Domyślnie grupa ROLE\_USER dziedziczy uprawnienia grupy IS\_AUTHENTICATED\_ANONYMOUSLY, natomiast ROLE\_ADMIN, dziedziczy uprawnienia z ROLE\_USER.
+Przedstawione nazwy grup, są grupami domyślnymi w platformie Spring Security. Oznacza to, że nie musimy definiować dziedziczenia uprawnień pomiędzy nimi. Domyślnie grupa ROLE\_USER dziedziczy uprawnienia grupy \newline IS\_AUTHENTICATED\_ANONYMOUSLY, natomiast ROLE\_ADMIN, dziedziczy uprawnienia z ROLE\_USER.
 
 \subsection{Zabezpieczenie komunikacji}
 
