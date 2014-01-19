@@ -146,6 +146,42 @@ List<AbstractCategory> getChildren( AbstractCategory parent );
 
 Jako parametr podaliśmy kategorie dla której chcemy znaleźć kategorie podrzędne(dzieci). Podany argument jest naszym miejscem zaczepienia w grafie od którego rozpocznie się dopasowanie. Klauzula MATCH odpowiada za definicje relacji między węzłami biorącymi udział w dopasowaniu. Słowo kluczowe RETRUN określa, który ze zdefiniowanych elementów chcemy otrzymać jako wynik zapytania. Najciekawsza tutaj jest klauzula MATCH. To ona wprowadza abstrakcję grafu i odróżnia zapytanie od np. języka SQL. Fragment zawarty między MATCH, a RETURN określa, to że szukamy dopasowania między węzłem parent(podanym jako parametr) a węzłami połączonymi z nim  jednokierunkową wychodzącą relacją o nazwie CONTAINS. 
 
+\section{Import danych z zewnetrznych serwisow przy pomocy udostepnionego API}
+
+Stworzona aplikacja umożliwia import informacji o kategoriach i produktach z zewnętrznych serwisów przy pomocy udostępnianego przez nie API (ang. \textit{Application Programming Interface}). Import danych odbywa się przy pomocy stworzonego interfejsu \textit{RemoteService}. Interfejs ten implementują dwie usługi, \textit{AllegroService} oraz \textit{NokautService}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1]{images/uml_remote_service2.png}
+	\caption{Diagram UML przedstawiający powiązanie między obiektami}
+\end{figure}
+
+Pierwsza z nich umożliwia import opisanych wcześniej informacji z serwisu Allegro przy pomocy SOAP(ang. \textit{Simple Object Accesss Protocol}). Druga natomiast do pozyskiwania informacji z portalu nokaut.pl, wykorzystuje wzorzec REST(ang. \textit{Representational State Transfer}) oraz klucz autoryzujący.
+
+\subsection{API Allegro}
+API udostępnione przez Allegro, jest bardzo rozbudowane i umożliwia pozyskanie wielu przydatnych informacji, np. drzewo kategorii, zestaw filtrów dla każdej z kategorii oraz informacje o wygranych aukcjach.
+Podczas tworzenia aplikacji okazało się, że API serwisu Allegro nie spełnia w zupełności naszych potrzeb.
+Nie udostępnia wszystkich potrzebnych danych, wykorzystywanych przez system RevCommunity. Przede wszystkim w serwisie Allegro nie istnieje obiekt typu produkt. Dostępne są jedynie aukcje, które nie gwarantują występowania unikalnych informacji o produktach. Współpraca z tym API wymagałaby po stronie RevCommunity odfiltrowania aukcji dotyczących powtarzających się produktów, co jest czasochłonne i nie gwarantuje całkowitej skuteczności. Z tego względu współpraca z tym API nie była kontynuowana.
+
+\subsection{API Nokaut.pl}
+Dostęp do API serwisu nokaut.pl, jest możliwy przy pomocy klucza autoryzującego. Aby uzyskać klucz należało:
+\begin{itemize}
+\item Zgłosić się do programu partnerskiego portalu
+\item Zaakceptować regulamin programu partnerskiego, który między innymi obliguje do zamieszczenia linków do nokaut.pl, na każdej stronie, na której znajdują się informacje pobrane przy jego pomocy
+\item Wysłać wiadomość na podany adres skrzynki emailowej, z informacją dotyczącą celu wykorzystania API
+\end{itemize}
+Po pozytywnym rozpatrzeniu prośby, w zwrotnej wiadomości email został zawarty wygenerowany klucz autoryzujący.
+
+API portalu nokaut.pl, dostarcza więcej przydatnych informacji w porównaniu z tym udostępnianym przez Allegro. Przy jego pomocy mamy możliwość pobrania następujących informacji:
+
+\begin{itemize}
+\item Pełne drzewo kategorii
+\item Filtry dla poszczególnych kategorii
+\item Unikalnych produktów
+\end{itemize}
+
+Komplet niezbędnych danych uzyskaliśmy poprzez dodatkowe parsowanie strony internetowej w portalu nokaut.pl, na której znajduje się opis produktu. Parsowanie polegało na pozyskiwaniu informacji z kodu źródłowego strony HTML(ang. \textit{HyperText Markup Language}). Uzyskane informacje zawierały między innymi, nazwę producenta, opis produktu oraz jego specyfikację. Taki zbiór informacji stanowi wystarczającą bazę danych, potrzebną do automatycznego wygenerowania danych w systemie.
+
 \section{Zabezpieczenia, model uprawnień}
 
 Dostęp do systemu RevCommunity został zabezpieczony przy użyciu platformy Spring Security. Platforma ta umożliwia uwierzytelnianie oraz autoryzację użytkowników w systemie. Dodatkowo Spring Security umożliwia modelowanie uprawnień dla grup zdefiniowanych w systemie.
