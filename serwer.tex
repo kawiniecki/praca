@@ -145,3 +145,69 @@ List<AbstractCategory> getChildren( AbstractCategory parent );
 \end{lstlisting}
 
 Jako parametr podaliśmy kategorie dla której chcemy znaleźć kategorie podrzędne(dzieci). Podany argument jest naszym miejscem zaczepienia w grafie od którego rozpocznie się dopasowanie. Klauzula MATCH odpowiada za definicje relacji między węzłami biorącymi udział w dopasowaniu. Słowo kluczowe RETRUN określa, który ze zdefiniowanych elementów chcemy otrzymać jako wynik zapytania. Najciekawsza tutaj jest klauzula MATCH. To ona wprowadza abstrakcję grafu i odróżnia zapytanie od np. języka SQL. Fragment zawarty między MATCH, a RETURN określa, to że szukamy dopasowania między węzłem parent(podanym jako parametr) a węzłami połączonymi z nim  jednokierunkową wychodzącą relacją o nazwie CONTAINS. 
+
+\section{Zabezpieczenia, model uprawnień}
+
+Dostęp do systemu RevCommunity został zabezpieczony przy użyciu platformy Spring Security. Platforma ta umożliwia uwierzytelnianie oraz autoryzację użytkowników w systemie. Dodatkowo Spring Security umożliwia modelowanie uprawnień dla grup zdefiniowanych w systemie.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.7]{images/spring_diagram.jpg}
+	\caption{Schemat procedury uwierzytelnienia oraz autoryzacji w platformie Spring Security}
+\end{figure}
+
+Proces uwierzytelnienia polega na weryfikacji nazwy oraz hasła konta użytkownika zarejestrowanego w systemie, w celu potwierdzenia jego tożsamości. 
+
+Proces autoryzacji z kolei ma na celu weryfikację czy dany użytkownik ma dostęp do żądanego zasobu systemowego. Po wysłaniu żądania przez klienta, platforma Spring Security sprawdza do jakiej grupy użytkownik jest przypisany. Na podstawie tej informacji oraz zdefiniowanego modelu uprawnień jest przyznawany lub nie, dostęp do żądanego zasobu.
+
+\subsection{Model uprawnień}
+
+Model uprawnień został zdefiniowany w pliku konfiguracyjnym SpringSecurity. Zawiera on definicję uprawnień dla  trzech grup użytkowników:
+
+\begin{itemize}
+\item Anonimowych
+\item Zarejestrowanych w systemie
+\item Administratorów
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.7]{images/hierarchia_uprawnien.png}
+	\caption{Hierarchię uprawnień pomiędzy użytkownikami}
+\end{figure}
+
+Na diagramie widać, że uprawnienia są dziedziczone. Użytkownicy niezalogowani posiadają swoją określoną pulę uprawnień. Użytkownicy zarejestrowani posiadają tą samą grupę uprawnień co użytkownicy nie zalogowani oraz dodatkową pule uprawnień nie dostępną dla użytkowników nie zarejestrowanych. Przykładem takiego uprawnienia może być między inny możliwość dodawania i oceniania recenzji. Administrator natomiast posiada wszystkie uprawnienia dostępne w systemie. Dodatkowymi możliwościami w przypadku administratora, które nie są dostępne dla zarejestrowanego użytkownika, są między innymi:
+
+\begin{itemize}
+\item Dodawanie nowego produktu
+\item Dodawanie nowej kategorii
+\item Uruchomienie importu danych z zewnętrznego serwisu
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.7]{images/model_uprawnien_xml.png}
+	\caption{Przykładowe wpisy zawarte w pliku konfiguracyjnym}
+\end{figure}
+
+Powyższy fragment pliku konfiguracyjnego przedstawia uprawnienia do poszczególnych zasobów przez istniejące w systemie grupy użytkowników. Znaczenie poszczególnych grup:
+
+\begin{itemize}
+\item IS\_AUTHENTICATED\_ANONYMOUSLY – użytkownicy nie posiadający konta w systemie
+\item ROLE\_USER – użytkownicy posiadający zarejestrowane kont w systemie
+\item ROLE\_ADMIN – użytkownicy pełniący rolę administratorów
+\end{itemize}
+
+ Zapis w pierwszej oraz drugiej linii oznacza że użytkownicy nie zarejestrowani mają dostęp do usług, które umożliwiają pobranie informacji o recenzjach istniejących w systemie oraz ich ocenach.
+Kolejne dwie linie (3 oraz 4) dotyczą użytkowników zarejestrowanych. Oznaczają one, że ci użytkownicy mają dostęp do wszystkich zasobów oraz usług, które są związane z komentarzami oraz subskrypcjami.
+Ostatnia linia (linia numer 5), definiuje uprawnienia użytkowników należących do grupy administratorów. Oznacza ona, że mają oni dostęp do wszystkich zasobów i usług serwisu.
+
+Przedstawione nazwy grup, są grupami domyślnymi w platformie Spring Security. Oznacza to, że nie musimy definiować dziedziczenia uprawnień pomiędzy nimi. Domyślnie grupa ROLE\_USER dziedziczy uprawnienia grupy IS\_AUTHENTICATED\_ANONYMOUSLY, natomiast ROLE\_ADMIN, dziedziczy uprawnienia z ROLE\_USER.
+
+\subsection{Zabezpieczenie komunikacji}
+
+Komunikacja pomiędzy klientem a serwerem odbywa się przy pomocy protokołu TLS w wersji 1.2. Dzięki zastosowaniu tego protokołu, zapewniona jest poufność oraz integralność przesyłanych informacji, zwłaszcza nazwy oraz hasła użytkownika, pomiędzy klientem a serwerem. Poufność komunikacji odbywa się poprzez szyfrowanie przesyłanych informacji. Szyfrowanie wiadomości chroni ją przed nieautoryzowanym dostępem do jej zawartości przez osoby trzecie.
+Integralność informacji przesyłanych pomiędzy klientem a serwerem jest natomiast zapewniona dzięki podpisowi cyfrowemu dołączanemu do wiadomości. Gwarantuje to, że informacje przesyłane pomiędzy klientem, a serwerem, nie zostały zmodyfikowane w trakcie transmisji.
+ Protokół TLS umożliwia także weryfikację tożsamości serwera. Polega to na sprawdzeniu czy serwer posiada poprawny certyfikat, przy pomocy, którego potwierdza swoją autentyczność. O autentyczności serwisu świadczy certyfikat, który jest przedstawiany klientowi. Tego typu certyfikat pozyskiwany jest od zaufanego organu certyfikującego. Klient widząc certyfikat podpisany przez zaufany urząd certyfikujący, ma pewność, że nawiązuje połączenie z prawdziwym serwerem.
+ 
+Przy tym zestawie zabezpieczeń użytkownik może swobodnie i bezpiecznie korzystać z zasobów oraz serwisu RevCommunity.
