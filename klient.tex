@@ -70,6 +70,33 @@ Kolejnym krokiem jest wybranie zdarzenia dla znalezionego komponentu. Ext Js okr
 
 Naszym rozszerzeniem powyższej architektury jest dodanie warstwy usług, której zadanie jest analogiczne do jej serwerowego odpowiednika. Stworzenie klas usług po stronie klienta miało na celu wyciągniecie implementacji z klas kontrolerów po to, aby lepiej zorganizować kod i umożliwić korzystanie z przydatnych funkcji w wielu miejscach. Pamiętajmy, że kontrolery są mocno związane z komponentami, natomiast klasy usług są podzielone według obszaru, którego dotyczą np. produktów, recenzji. Dlatego kontrolery zajmują się przetworzeniem danych do odpowiedniego formatu wymaganego przez klasy usług, nie implementują bezpośrednio żadnych operacji.
 
+
+
+
+\section{Dynamiczne style CSS}
+W projekcie do opisu formy prezentacji widoku strony klienckiej użyto dynamicznych arkuszy stylów – LESS. Głównym zadaniem LESS jest rozszerzenie możliwości CSS (ang. Cascading Style Sheets) między innymi o takie elementy jak możliwość definiowania zmiennych i funkcji, łatwe zagnieżdżanie selektorów czy proste operacje. Wszystko to zostaje później podczas ładowania strony przekompilowane na zwykły kod CSS, tak by był on zrozumiały dla przeglądarek. CSS czyli kaskadowy arkusz styli pozwala dodać graficzny układ do strony internetowej. Określają one wygląd różnych elementów HTML znajdujących się na danej stronie internetowej. 
+LESS ma przewagę nad CSS, ponieważ zmienne pozwalają na zdefiniowanie wartości na przykład koloru czy szerokości w jednym miejscu, które następnie można wykorzystać w obrębie całego arkusza stylów. Umożliwia to globalne zmiany poprzez modyfikację jednej linijki kodu. Jest to bardzo wygodne rozwiązanie. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.00\textwidth]{images/less1.png}
+	\caption{Przykładowy kod LESS i wygenerowany z niego kod CSS}
+\end{figure}
+\paragraph{}
+W zwykłym pliku CSS, gdy jest potrzeba zmiany na przykład jakiegoś koloru na inny, trzeba ręcznie tą wartość zmienić w każdym miejscu arkusza stylów, w którym się pojawia. Jest to czasochłonne, dlatego przy budowie projektu zrezygnowano z tego rozwiązania na rzecz LESS. 
+W dynamicznych arkuszach styli można tworzyć również tak zwane „domieszki”. Domieszki to inaczej dziedziczenie przez dopisanie wartości do wszystkich właściwości danej klasy w innej klasie, poprzez wykorzystanie nazwy klasy jako jednej z wartości innej klasy. Zasada działania jest podoba do zmiennych, przy czym domieszki dotyczą całej konkretnej klasy. Domieszki mogą również działać jak funkcje i przyjmować argumenty, tak jak w poniższym przykładzie.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.00\textwidth]{images/less2.png}
+	\caption{Przykład użycia domieszek}
+\end{figure}
+\paragraph{}
+
+Dynamiczny arkusz styli  będąc rozszerzeniem kaskadowego arkusza styli jest z nim zarówno kompatybilny wstecz jak i korzysta z jego składni w czasie budowy nowych struktur leksykalnych. To sprawia, że nauka LESS jest prosta.
+W projekcie kompilacja plików LESS do plików CSS następuje wraz z restartem serwera, dzięki czemu ten zabieg nie obciąża użytkowników. 
+
+
 \section{AJAX}
 Wykorzystanie biblioteki Ext JS do budowy klienckiej części aplikacji, umożliwiło realizację projektu w oparciu o koncepcję AJAX (Asynchronous JavaScript and XML). Jest to technika tworzenia aplikacji internetowych, w której komunikacja pomiędzy klientem, zrealizowanym w języku JavaScript, a serwerem odbywa się asynchronicznie, dzięki czemu nie ma konieczności przeładowania całej strony w celu zmiany jej treści, a użytkownik może kontynuować pracę, oczekując na odpowiedź z serwera.[Odwołanie: "AJAX – rewolucja w tworzeniu aplikacji internetowych", s.41, Marek Wojciechowski, Warszawa 2006]
 
@@ -119,4 +146,4 @@ Każda reguła zbudowana jest według schematu [wzorzec] : [nazwa\_funkcji]. W m
 
 Wzorzec może zawierać dodatkowo specjalne wyrażenia ułatwiające manipulację adresami. Jednym z nich jest użyta w powyższym przykładzie konstrukcja \textit{'products/filter/:categoryId':'filterProducts'}, dzięki której część dopasowanego adresu url, znajdująca się w miejscu identyfikatora \textit{':categoryId'} zostanie przekazana do funkcji \textit{filterProducts} jako argument o nazwie \textit{categoryId}.
 
-Warto również zauważyć, że kolejność reguł ma wpływ na ich późniejszą interpretację. Biblioteka Backbone.js przegląda reguły w kolejności ich definiowania. W powyższym przykładzie reguła \textit{'products/filter/:categoryId':'filterProducts'} celowo została umieszczona przed regułą \textit{'products/:id':'product'}, poniważ jej wzorzec \textit{'products/filter/:categoryId'} zawiera się we wzorcu \textit{'products/:id'}. Zamiana kolejności wspomnianych reguł spowodowałaby brak możliwości wykorzystania jednej z nich. 
+Warto również zauważyć, że kolejność reguł ma wpływ na ich późniejszą interpretację. Biblioteka Backbone.js przegląda reguły w kolejności ich definiowania. W powyższym przykładzie reguła \textit{'products/filter/:categoryId':'filterProducts'} celowo została umieszczona przed regułą \textit{'products/:id':'product'}, poniważ jej wzorzec \textit{'products/filter/:categoryId'} zawiera się we wzorcu \textit{'products/:id'}. Zamiana kolejności wspomnianych reguł spowodowałaby brak możliwości wykorzystania jednej z nich. [też http://documentcloud.github.io/backbone/\#Router]
