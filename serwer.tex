@@ -14,7 +14,7 @@ Zdecydowaliśmy się na architekturę warstwową opartą na trzech poziomach:
 Zależności między warstwami są hierarchiczne, oznacza to, że warstwa wyższa może korzystać wyłącznie z warstwy bezpośrednio niższej. 
 Schemat hierarchii warstw:
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{images/warstwy_serwer.png}
 	\caption{Schemat hierarchii warstw}
@@ -29,21 +29,11 @@ Dzięki takiej architekturze uzyskaliśmy separację grup funkcji co poprawia cz
 
 Do implementacji warstwy komunikacji wykorzystaliśmy Spring MVC. Jest to element Spring Framework pozwalający w wygodny sposób implementować obsługę zapytań HTTP do serwera. Głównym elementem mechanizmu jest DisptacherServlet do którego są kierowane wszystkie żądania pasujące do określonego wzorca. Definicję DisptacherServlet umieszczamy w pliku web.xml. Fragment reprezentujący konfigurację może wyglądać następująco:
 
-\begin{lstlisting}[language=XML,caption=Konfiguracja DispatcherServlet]
-<servlet>
-	<servlet-name>mvc-dispatcher</servlet-name>
-	<servlet-class>
-		org.springframework.web.servlet.DispatcherServlet
-	</servlet-class>
-	<load-on-startup>1</load-on-startup>
-</servlet>
-
-<servlet-mapping>
-	<servlet-name>mvc-dispatcher</servlet-name>
-	<url-pattern>/rest/*</url-pattern>
-</servlet-mapping>
-\end{lstlisting}
-
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/dispatcher.png}
+	\caption{Konfiguracja DispatcherServlet}
+\end{figure}
 
 Jest to zwykła konfiguracja mapowania servletu. Sprawia ona, że każde żądanie zaczynające się od prefixu /rest/ wywoła DispatcherServlet. Zdaniem tego komponentu jest wykonanie odpowiedniej funkcji obsługującej wywołane zapytanie. Polega to na mapowaniu żądanego adresu URL do odpowiedniej klasy i metody. Wyszukiwanie dopasowania ogranicza się do klas oznaczonych adnotacją @Controller. Spring MVC filtruje tak oznaczone klasy, a następnie poszukuje adnotacji @RequestMapping zawierającej informację o mapowaniu URL na metodę lub klasę. Jeżeli oznaczymy naszą klasę adnotacją np. @RequestMapping(“/users”) to wszystkie mapowania metod w tej klasie będą zaczynały się od “/users”. Przypisując mapowanie do metody wzorzec dopasowania będzie połączeniem mapowania klasy i metody, czyli np. “/users/newest”. Możemy również zrezygnować z podawania wzorca przy funkcji, a zamiast tego dla rozróżnienia operacji określić metodę protokołu HTTP( POST ,GET, PUT, DELETE). Dzięki takiemu podejściu możemy wywołać zapytanie o takim samym URL, ale w zależności użytej metody HTTP wykona się inna operacja. 
 
@@ -82,26 +72,11 @@ Przy korzystaniu z architektury REST mogą pojawić się pewne problemy, gdy w z
 Spring MVC poza mapowaniem parametrów wejściowych zapytań HTTP umożliwia również konwersję zwracanych danych do różnych formatów, lub przekierowanie do odpowiedniego widoku. Warstwa widoku naszej aplikacji działa w sposób dynamiczny, czyli nie odświeżamy całej strony podczas przejścia między widokami, lecz zmieniamy dynamicznie wyświetlane treści. To znacznie ograniczyło wykorzystywanie przez nas przekierowań do widoków w kontrolerach, na rzecz konwersji danych do formatu JSON. Spring MVC pozwala na konwersję do wielu innych formatów m.in. XML, obraz, strumień bajtów, łańcuch znaków. Jednak nasze kontrolery zgodnie z ideą REST zwracają pewne zbiory danych(zasobów) bez informacji o wyglądzie tych danych(wygląd zaimplementowany jest w części klienckiej). Dobrym wyborem w takiej sytuacji wydaje się również XML jednak format JSON jest częścią języka javascript co znaczeni uprościło komunikację między serwerem, a klientem( część kliencka oparta jest głównie o język javascript).
 Czym tak naprawdę jest JSON? JSON(JavaScript Object Notation) jest to format służący do przechowywania i wymiany danych. Podobnie jak XML format JSON ma strukturę drzewiastą i jest wspierany przez technologię AJAX. Każdy z formatów ma wady i zalety. Format XML wymaga więcej miejsca, ze względu na znaczniki przy każdej wartości i znaczniki końcowe, jednak z drugiej strony zwiększa to czytelność dokumentu. Przykładowo mając długą listę elementów w dokumencie XML w dowolnym miejscu widzimy znacznik opisujący wartość, natomiast w JSON klucz widoczny jest tylko na początku listy. Jednak w dzisiejszych czasach przesyłamy coraz więcej danych, również między urządzeniami mobilnymi z mniejszymi możliwościami obliczeniowymi, więc rozmiar przesyłanych dokumentów ma duże znaczenie. JSON wydaje się również bardziej naturalny z uwagi na brak nadmiarowych informacji i łatwiejszy do ręcznego definiowania. 
 
-\begin{lstlisting}[language=json,caption=Przykład użycia formatu JSON]
-{
-    extend: 'Ext.data.Model',
-    fields: [
-          'channel',
-          'notification',
-          {
-          	name:'product',
-          	mapping:'channel.channelProduct'
-          }
-         
-    ],
-    idProperty:'extid',
-    proxy: {
-        type: 'rest',
-        url : 'rest/subscriptions/products/notifications'
-    }
-}
-\end{lstlisting}
-
+\begin{figure}[H]
+	\centering
+	\includegraphics{images/json.png}
+	\caption{Przykład użycia formatu JSON}
+\end{figure}
 
 \section{Warstwa biznesowa}
 
@@ -120,17 +95,20 @@ Wstawić schemat bazy danych
 
 Gdy zamodelowaliśmy już nasze obiekty bazodanowe przydadzą się nam elementy umożliwiające wykonywanie operacji na tych obiektach. Dlatego stworzyliśmy szereg interfejsów pozwalających zarządzać naszymi encjami. Do tego celu wykorzystaliśmy pakiet Spring Data. Jego zadaniem jest znaczne zredukowanie powtarzającego się kodu implementującego warstwę dostępu do danych. Moduł udostępnia mechanizmy, które w sposób dynamiczny implementują stworzone przez nas interfejsy. Aby korzystać z udogodnień pakietu musimy rozszerzyć dostarczony przez Spring Data generyczny interfejs GraphRepository. Jako parametr generyczny podajemy klasę encji, na której będziemy operować. I od razu możemy wykonywać podstawowe operacji tj. zapis, odczyt, modyfikacji, czy proste wyszukiwanie. Dodatkowo możemy dodać do interfejsu definicje metod wykonujących bardziej konkretne zadania poprzez odpowiednią konstrukcję ich nazw. Spring wykorzystuje mechanizm refleksji do wygenerowania zapytania na podstawie nazwy metody, jej parametrów i definicji klasy, którą przekazaliśmy jako parametr generyczny do interfejsu GraphRepository. Spójrzmy na przykład(fragment UserRepo):
 
-\begin{lstlisting}[language=Java]
-User findByUserName( String userName );
-\end{lstlisting}
+\begin{figure}[H]
+	\centering
+	\includegraphics{images/findbyusername.png}
+\end{figure}
+
 
 Powyższa metoda pozwoli nam pobrać obiekt użytkownika o podanej nazwie. Mechanizm budujący zapytanie odnajduje wzorzec findBy po którym występuje nazwa pola klasy, której dotyczy interfejs. Następnie sprawdza, czy argument metody jest tego samego typu co pole userName klasy User. Jeżeli w klasie User nie byłoby pola userName lub jego typ nie zgadzałby się z typem argumentu to podczas uruchamiania systemu rzucony zostałby wyjątek. 
 Nazwy metod mogą wykorzystywać bardziej złożone wzorce pozwalające na zdefiniowanie wielu pól po których chcemy wyszukiwać. Warunki dotyczące pól możemy łączyć operatorami logicznymi AND i OR.  Możemy również ustawić pewne opcje dodatkowe tj. ignorowanie wielkości znaków, czy usunięcie duplikatów ze zbioru wyników. Dodając suffix Asc lub Desc określamy sortowanie elementów. Bardziej rozbudowany przykład mógłby wyglądać następująco:
 
-\begin{lstlisting}[language=Java]
-List<User> findDistinctByUserNameOrLastNameIgnoreCaseDesc(
-			 String userName,String lastName );
-\end{lstlisting}
+\begin{figure}[H]
+	\centering
+	\includegraphics{images/findlong.png}
+\end{figure}
+
 
 Taka metoda wygeneruje zapytanie pobierające użytkowników o podanym loginie lub nazwisku, z wykluczeniem duplikatów(słowo distinct) posortowanych malejąco i przy porównywaniu nazwiska zostanie pominięta wielkość znaków. 
 Poza tworzeniem zapytań poprzez nazwy metod możemy również wykorzystać natywne zapytanie bazodanowe. Co prawda takie podejście bardziej uzależnia nas od wybranej technologii, jednak w naszym przypadku system bazuje na zapytaniach korzystających ze specyficznych możliwości grafowej bazy danych. Metody wykonujące zapytania również możemy umieszczać w definicji interfejsu. Jedną rzeczą, która należy wykonać to oznaczyć metodę adnotacją @Query i wpisać w niej treść zapytania. Do zapytania możemy oczywiście wprowadzać parametry, które zostaną pobrane z definicji metody. Językiem w którym będziemy komunikować się z bazą danych Neo4j jest Cypher. 
@@ -138,11 +116,10 @@ Czy tu opisać składnie języka Cypher?
 
 Przejdźmy do przykładu:
 
-\begin{lstlisting}[language=Java]
-@Query( "START parent=node({0}) 
-MATCH parent-[:CONTAINS]->children RETURN children" )
-List<AbstractCategory> getChildren( AbstractCategory parent );
-\end{lstlisting}
+\begin{figure}[H]
+	\centering
+	\includegraphics{images/query.png}
+\end{figure}
 
 Jako parametr podaliśmy kategorie dla której chcemy znaleźć kategorie podrzędne(dzieci). Podany argument jest naszym miejscem zaczepienia w grafie od którego rozpocznie się dopasowanie. Klauzula MATCH odpowiada za definicje relacji między węzłami biorącymi udział w dopasowaniu. Słowo kluczowe RETRUN określa, który ze zdefiniowanych elementów chcemy otrzymać jako wynik zapytania. Najciekawsza tutaj jest klauzula MATCH. To ona wprowadza abstrakcję grafu i odróżnia zapytanie od np. języka SQL. Fragment zawarty między MATCH, a RETURN określa, to że szukamy dopasowania między węzłem parent(podanym jako parametr) a węzłami połączonymi z nim  jednokierunkową wychodzącą relacją o nazwie CONTAINS. 
 
