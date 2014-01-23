@@ -133,7 +133,7 @@ Stworzona aplikacja umożliwia import informacji o kategoriach i produktach z ze
 	\caption{Diagram UML przedstawiający powiązanie między obiektami.}
 \end{figure}
 
-Pierwsza z nich umożliwia import opisanych wcześniej informacji z serwisu Allegro przy pomocy SOAP(ang. \textit{Simple Object Accesss Protocol}). Druga natomiast do pozyskiwania informacji z portalu nokaut.pl, wykorzystuje wzorzec REST(ang. \textit{Representational State Transfer}) oraz klucz autoryzujący.
+Pierwsza z nich umożliwia import opisanych wcześniej informacji z serwisu Allegro przy pomocy SOAP(ang. \textit{Simple Object Accesss Protocol}).SOAP jest protokołem umożliwiającym zdalne wykonywanie udostępnionych usług. Komunikacja polega na przesyłaniu pliku XML w odpowiednim formacie, który może zawierać żądanie wykonania określonej usługi lub odpowiedź dotyczącą wykonanej usługi.\cite{soap} \indent Druga natomiast do pozyskiwania informacji z portalu nokaut.pl, wykorzystuje wzorzec REST(ang. \textit{Representational State Transfer}) oraz klucz autoryzujący.
 
 \subsection{API Allegro}
 API udostępnione przez Allegro, jest bardzo rozbudowane i umożliwia pozyskanie wielu przydatnych informacji, np. drzewo kategorii, zestaw filtrów dla każdej z kategorii oraz informacje o wygranych aukcjach.
@@ -163,9 +163,9 @@ Komplet niezbędnych danych uzyskaliśmy poprzez dodatkowe parsowanie strony int
 
 Dostęp do systemu RevCommunity został zabezpieczony przy użyciu platformy Spring Security. Platforma ta umożliwia uwierzytelnianie oraz autoryzację użytkowników w systemie. Dodatkowo Spring Security umożliwia modelowanie uprawnień dla grup zdefiniowanych w systemie.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.7]{images/spring_diagram.jpg}
+	\includegraphics[width=1.00\textwidth]{images/spring_diagram.jpg}
 	\caption{Schemat procedury uwierzytelnienia oraz autoryzacji w platformie Spring Security.}
 \end{figure}
 
@@ -185,7 +185,7 @@ Model uprawnień został zdefiniowany w pliku konfiguracyjnym SpringSecurity. Za
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{images/hierarchia_uprawnien.png}
+	\includegraphics[width=1.00\textwidth]{images/hierarchia_uprawnien.png}
 	\caption{Hierarchia uprawnień pomiędzy użytkownikami.}
 \end{figure}
 
@@ -199,7 +199,7 @@ Na diagramie widać, że uprawnienia są dziedziczone. Użytkownicy niezalogowan
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.7]{images/model_uprawnien_xml.png}
+	\includegraphics[width=1.00\textwidth]{images/model_uprawnien_xml.png}
 	\caption{Przykładowe wpisy zawarte w pliku konfiguracyjnym.}
 \end{figure}
 
@@ -215,12 +215,12 @@ Powyższy fragment pliku konfiguracyjnego przedstawia uprawnienia do poszczegól
 Kolejne dwie linie (3 oraz 4) dotyczą użytkowników zarejestrowanych. Oznaczają one, że ci użytkownicy mają dostęp do wszystkich zasobów oraz usług, które są związane z komentarzami oraz subskrypcjami.
 Ostatnia linia (linia numer 5), definiuje uprawnienia użytkowników należących do grupy administratorów. Oznacza ona, że mają oni dostęp do wszystkich zasobów i usług serwisu.
 
-Przedstawione nazwy grup, są grupami domyślnymi w platformie Spring Security. Oznacza to, że nie musimy definiować dziedziczenia uprawnień pomiędzy nimi. Domyślnie grupa ROLE\_USER dziedziczy uprawnienia grupy \newline IS\_AUTHENTICATED\_ANONYMOUSLY, natomiast ROLE\_ADMIN, dziedziczy uprawnienia z ROLE\_USER.
+Przedstawione nazwy grup, są grupami domyślnymi w platformie Spring Security. Oznacza to, że nie musimy definiować dziedziczenia uprawnień pomiędzy nimi. Domyślnie grupa ROLE\_USER dziedziczy uprawnienia grupy \newline IS\_AUTHENTICATED\_ANONYMOUSLY, natomiast ROLE\_ADMIN, dziedziczy uprawnienia z ROLE\_USER.\cite{springSecurity}
 
 \subsection{Zabezpieczenie komunikacji}
 
 Komunikacja pomiędzy klientem a serwerem odbywa się przy pomocy protokołu TLS w wersji 1.2. Dzięki zastosowaniu tego protokołu, zapewniona jest poufność oraz integralność przesyłanych informacji, zwłaszcza nazwy oraz hasła użytkownika, pomiędzy klientem a serwerem. Poufność komunikacji odbywa się poprzez szyfrowanie przesyłanych informacji. Szyfrowanie wiadomości chroni ją przed nieautoryzowanym dostępem do jej zawartości przez osoby trzecie.
 Integralność informacji przesyłanych pomiędzy klientem a serwerem jest natomiast zapewniona dzięki podpisowi cyfrowemu dołączanemu do wiadomości. Gwarantuje to, że informacje przesyłane pomiędzy klientem, a serwerem, nie zostały zmodyfikowane w trakcie transmisji.
- Protokół TLS umożliwia także weryfikację tożsamości serwera. Polega to na sprawdzeniu czy serwer posiada poprawny certyfikat, przy pomocy, którego potwierdza swoją autentyczność. O autentyczności serwisu świadczy certyfikat, który jest przedstawiany klientowi. Tego typu certyfikat pozyskiwany jest od zaufanego organu certyfikującego. Klient widząc certyfikat podpisany przez zaufany urząd certyfikujący, ma pewność, że nawiązuje połączenie z prawdziwym serwerem.
- 
-Przy tym zestawie zabezpieczeń użytkownik może swobodnie i bezpiecznie korzystać z zasobów oraz serwisu RevCommunity.
+ Protokół TLS umożliwia także weryfikację tożsamości serwera. Polega to na sprawdzeniu czy serwer posiada poprawny certyfikat, przy pomocy, którego potwierdza swoją autentyczność. O autentyczności serwisu świadczy certyfikat, który jest przedstawiany klientowi. Tego typu certyfikat pozyskiwany jest od zaufanego organu certyfikującego. Klient widząc certyfikat podpisany przez zaufany urząd certyfikujący, ma pewność, że nawiązuje połączenie z prawdziwym serwerem.\cite{tls}
+\paragraph{}
+Przy tym zestawie zabezpieczeń użytkownik może swobodnie i bezpiecznie korzystać z usług oraz zasobów serwisu RevCommunity.
