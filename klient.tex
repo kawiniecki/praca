@@ -103,24 +103,23 @@ Wykorzystanie biblioteki Ext JS do budowy klienckiej części aplikacji, umożli
 Zastosowanie asynchronicznych wywołań sprawdza się doskonale podczas ładowania danych do graficznych komponentów warstwy widoku, takich jak panele, listy czy tabele. W trakcie pobierania danych do jednego z komponentów, pozostała część strony pozostaje aktywna i umożliwia interakcję z użytkownikiem, w tym także realizację kolejnych zapytań. Ponadto, po zakończeniu ładowania aktualizowane są tylko te elementy strony, dla których jest to konieczne. Wszystko to, ma pozytywny wpływ na poziom interaktywności i wrażenia końcowego użytkownika aplikacji.
 
 Najważniejsze zastosowania techniki AJAX w aplikacji revCommunity:
-
 \begin{itemize}
 \item\textbf{Dynamiczne drzewo kategorii.} Ze względu na nieograniczone możliwości rozbudowy drzewa kategorii, komponent ten został zorganizowany w taki sposób, by żądane elementy pobierać tylko wtedy, gdy zachodzi konieczność ich prezentacji.
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{images/Kategorie.png}
 	\caption{Dynamiczne drzewo kategorii}
 \end{figure}
 \item\textbf{Stronicowanie (ang. paging) i sortowanie.} Ze względu na nieograniczone możliwości rozbudowy drzewa kategorii, komponent ten został zorganizowany w taki sposób, by żądane elementy pobierać tylko wtedy, gdy zachodzi konieczność ich prezentacji.
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{images/paging.png}
 	\caption{Stronicowanie listy produktów}
 \end{figure}
 \item\textbf{Współbieżne ładowanie danych przez komponenty widoku.} Przykładem takiego zastosowania techniki AJAX jest ekran startowy aplikacji, w którym zarówno lista produktów, lista recenzji, jak i widok polecanych użytkowników ładowane są niezależnie.
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.7]{images/Loading.png}
+	\includegraphics[scale=0.6]{images/Loading.png}
 	\caption{Współbieżne ładowanie danych}
 \end{figure}
 \end{itemize}

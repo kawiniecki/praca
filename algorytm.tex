@@ -50,8 +50,9 @@ Dane użytkowników reprezentowane są przez:
 Całkowity przegląd danych okazał się szczególnie przydatny w ustalaniu odpowiednich wag i wartości stałych biorących udział w obliczaniu przydatności recenzji i oceny autora.
 
 Wartości błędów wykorzystane są do obliczenia RMSE (ang. root mean squared error), który pozwala na szybkie porównanie różnych przypadków testowych. RMSE mierzy o ile jednostek średnio różnią się wartości obliczone od wartości domyślnej.\cite{rmseWiki}\\
-
-$ RMSE=\sqrt{\frac{\sum_{t=1}^n (\bar{y_{t}}-y_{t})^2}{n}} $\\\\
+\begin{equation}
+RMSE=\sqrt{\frac{\sum_{t=1}^n (\bar{y_{t}}-y_{t})^2}{n}}
+\end{equation}
 gdzie:\\
 n- liczba pomiarów\\
 $\bar{y_{t}}$ - wartość domyślna\\
