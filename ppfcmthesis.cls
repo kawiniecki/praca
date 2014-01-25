@@ -43,6 +43,7 @@
 \selectlanguage{polish}
 \RequirePackage{indentfirst}
 \addto\captionspolish{\renewcommand{\bibname}{Literatura}}   % Force "Literatura" instead of "Bibliografia"
+\addto\captionspolish{\renewcommand{\tablename}{Tabela}}   % Force "Tabela" instead of "Tablica"
 \else
 \selectlanguage{english}
 \fi

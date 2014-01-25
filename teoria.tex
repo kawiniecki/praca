@@ -1,4 +1,4 @@
-\chapter{Wstęp teoretyczny}
+\chapter{Podstawy teoretyczne}
 
 \section{Istniejące rozwiązania}
 Obecnie w sieci istnieje wiele serwisów umożliwiających porównywanie, ocenianie i tworzenie opinii o produktach. Są to między innymi cokupić.pl,  ceneo.pl, nokaut.pl, skapiec.pl oraz kupujemy.pl. Wszystkie te serwisy oferują pomoc przy zakupie określonego produktu. Posiadają one aktualną bazę wielu produktów znajdujących się na rynku przez co umożliwiają użytkownikowi zapoznanie się z nimi. Najbardziej zawansowanymi projektami, które oferują szereg funkcjonalności są ceneo.pl oraz skapiec.pl. Oba serwisy umożliwiają przede wszystkim porównywanie cen produktów pochodzących z różnych sklepów. Posiadają one  również rozwinięty system opiniowania produktów. Użytkownicy mogą wypowiadać się na temat każdego produktu, wypisywać jego wady i zalety, a także oceniać czy opnie innych użytkowników są przydatne. Funkcjonalność udostępniana przez te serwisy została również wdrożona w projekcie RevCommunity. W naszym systemie duży nacisk został położony na stworzenie algorytmu rankingowego, który umożliwia ocenianie recenzji w sposób bardziej wiarygodny. Ten element systemu sprawia, że jest on konkurencyjny w stosunku do wyżej wymienionych portali. 
@@ -49,13 +49,12 @@ W przykładzie zliczono liczbę wszystkich węzłów w grafie. Aby bardziej wyko
 Widzimy tutaj nową klauzulę START, która jak nazwa wskazuje pozwala zdefiniować początkowy węzeł od którego rozpocznie się dopasowanie zawarte w klauzuli MATCH. W zapytaniu użyliśmy dwóch zmiennych - user i review. Do zmiennej user przypisujemy węzeł, który posiada wartości "jkowalski" w polu userName(część indeksu o nazwie "users"). Dalej dla tego wierzchołka wyszukane są wszystkie wyjściowe łuki o etykiecie "WROTE". Dzięki temu udało się dojść do węzłów recenzji, które zwrócono przy pomocy klauzuli RETURN. Ostatnia klauzula definiuje sortowanie po tytule recenzji w sposób analogiczny do języka SQL. Warto tutaj zwrócić uwagę na skalowalność grafowych baz danych w porównaniu do modelu relacyjnego. Gdyby spróbować napisać powyższe zapytanie w języku SQL musielibyśmy połączyć dwie tabele użytkowników i recenzji. Koszt takiego połączenia jest tym większy im więcej rekordów zawiera każda z tabel. W rzeczywistych systemach z czasem danych przybywa, więc aplikacja działałaby coraz wolniej. Natomiast w grafowej bazie danych węzły nie są zależne od siebie, a dostęp do ich powiązań jest bardzo szybki, dlatego czas wykonania zapytania pozostałby stały mimo rozrastania się grafu. Różnica wydajności między podejściami wzrosłaby, gdyby w zapytaniu dodać kolejne połączenie np. dotyczące komentarzy recenzji. W takim przypadku w RBD konieczne byłoby połączenie trzech tabel, co przy dużej liczbie rekordów byłoby bardzo kosztowne.
 
 
-
-
 \section{Podstawy do stworzenie algorytmu rankingowego}
+\label{sec:algTeotia}
 
 Jak wspomniano w rozdziale drugim, wiele istniejących systemów opiera się o proste metody oceniania treści, które często okazują się zawodne. Jedną z często spotykanych praktyk jest zastosowanie średniej arytmetycznej do obliczenia ostatecznej oceny widocznej dla użytkowników danego serwisu, a także wykorzystywanej np. do sortowania wyników wyszukiwania czy też porównywania pewnych treści. Przykładem systemu wykorzystującego wspomniany mechanizm jest popularny serwis internetowy cokupić.pl, dający użytkownikom możliwość oceniania produktów. Rozważmy scenariusz w którym użytkownik korzysta z systemu w celu znalezienia najlepiej ocenianego przez internautów telefonu komórkowego. Załóżmy, że po zastosowaniu odpowiednich filtrów użytkownikowi przedstawione zostają dwa produkty, A i B. Pierwszy z nich został oceniony przez pięćdziesięciu użytkowników i posiada średnią ocenę 3.5. Drugi oceniły tylko dwie osoby przydzielając oceny 3 i 5, zatem jego średnia ocena wynosi 4. Średnia ocena produktu B jest nieznacznie wyższa, zatem zostaje on zaprezentowany użytkownikowi jako pierwszy, podczas gdy produkt A posiada znacznie więcej ocen, a tym samym wiarygodność jego średniej oceny jest wyższa, co może mieć duży wpływ na decyzję użytkownika. Warto zauważyć, że w opisanym podejściu brakuje odniesienia średniej oceny produktu do innych ocen w systemie, przez co porównywanie produktów czy też budowanie właściwego rankingu jest utrudnione.
 
-Aby uniknąć wspomnianych problemów, zaproponowano podejście oparte na średniej Bayesa. Średnia Bayesa jest metodą obliczania wartości średniej populacji wraz z uwzględnieniem pewnych zewnętrznych danych związanych z rozważaną populacją. Dodanie czynnika zewnętrznego ma na celu zredukowanie wpływu pojedynczych wartości odbiegających od średniej na ostateczny wynik. Dodatkowo czynnik ten pełni rolę wartości domyślnej czyli takiej do której dąży wartość średniej Bayesa w przypadku małego zbioru danych.\cite{bayesWiki}
+Aby uniknąć wspomnianych problemów, zaproponowano podejście oparte na średniej Bayesa. Średnia Bayesa jest metodą obliczania wartości średniej populacji wraz z uwzględnieniem pewnych zewnętrznych danych związanych z rozważaną populacją. Dodanie czynnika zewnętrznego ma na celu zredukowanie wpływu pojedynczych wartości odbiegających od średniej na ostateczny wynik. Dodatkowo czynnik ten pełni rolę wartości domyślnej, czyli takiej, do której dąży wartość średniej w przypadku małego zbioru danych.\cite{bayesWiki} Poniżej przedstawiono wzór średniej Bayesa.
 
 \begin{equation}
 \bar{x}=\frac{Cm+nx}{C+n}
@@ -68,81 +67,6 @@ n - liczba elementów zbioru\\
 
 
 Należy zaznaczyć, że dobór wartości domyślnej m i stałej C może zależeć od celu obliczeń, charakterystyki zbioru danych i intuicji osoby wykonującej obliczenia.
-
-Koncepcja średniej Bayesa została przez nas wykorzystana do stworzenia wzoru pozwalającego obliczyć przydatność recenzji, dzięki której użytkownik może w łatwy sposób odfiltrować treści ocenione jako nieprzydatne przez innych użytkowników i zapoznać się z rzetelną recenzją interesującego go produktu. System umożliwia bowiem sortowanie recenzji wg ich przydatności. Własność ta, budowana jest przede wszystkim na podstawie głosów oddanych przez innych użytkowników, którzy zapoznając się z recenzją mają możliwość jednokrotnego oddania głosu, oznaczając recenzję jako przydatną lub nie. Wspomniana cecha recenzji tworzona jest więc przy wykorzystaniu inteligencji tłumu. Użytkownicy są bowiem świadomi tego, że każda wystawiona przez nich ocena przyczynia się do budowania właściwej hierarchii recenzji w systemie, a ta jest przez nich pożądana.
-
-Nie jest to jednak jedyne zastosowanie przydatności w naszym systemie. Ma ona bowiem także wpływ na wagę oceny recenzji w ostatecznej ocenie produktu. Każdy z produktów w systemie może posiadać wiele recenzji, a każda z nich zawiera subiektywną ocenę opisywanego produktu wydaną przez jej autora. Obliczanie łącznej oceny produktu jako średniej arytmetycznej ocen wynikających z recenzji może prowadzić do uzyskania oceny, która nie oddaje we właściwy sposób faktycznej wartości produktu. Możliwa jest bowiem sytuacja, w której produkt zostanie oceniony przez nierzetelnych użytkowników, którzy z różnych przyczyn, np. będąc pracownikami konkurencyjnej firmy będą zabiegali o celowe zaniżenie oceny produktu. Aby uniknąć wspomnianej sytuacji, w celu obliczenia ostatecznej oceny zastosowano średnią ważoną ocen pochodzących z recenzji danego produktu gdzie wagami są przydatności recenzji. Dzięki temu wiarygodne  recenzje napisane przez rzetelnych użytkowników mają większą wagę, a co za tym idzie większy wpływ na ocenę produktu.
-
-Wzór pozwalający na obliczenie przydatności recenzji R ma następującą postać:
-
-\begin{equation}
-\bar{x_{R}}=\frac{w_{m}Cm+w_{g}\frac{p}{p+n}(p+n)+w_{a}\frac{p_{a}}{p_{a}+n_{a}}(p_{a}+n_{a})}{w_{m}C+w_{g}(p+n)+w_{a}(p_{a}+n_{a})}*100\%
-\end{equation}
-gdzie:\\
-m - domyślna przydatność recenzji, czyli średnia arytmetyczna przydatności wszystkich recenzji w systemie\\
-C - stała dobrana eksperymentalnie\\
-p - liczba głosów pozytywnych oddanych na recenzję R\\
-n - liczba głosów negatywnych oddanych na recenzję R\\
-$p_{a}$ - liczba głosów pozytywnych oddanych na wszystkie recenzje autora recenzji R\\
-$n_{a}$ - liczba głosów negatywnych oddanych na wszystkie recenzje autora recenzji R\\
-$w_{m}$ - waga domyślnej przydatności recenzji\\
-$w_{g}$ - waga głosów oddanych na recenzję R\\
-$w_{a}$ - waga głosów oddanych na wszystkie recenzje autora recenzji R.\\
-
-
-Podstawowym składnikiem przedstawionego wzoru są głosy oddane przez użytkowników systemu. Zostały one przedstawione jako iloczyn stosunku liczby głosów pozytywnych do wszystkich oddanych na daną recenzję i łącznej liczby głosów. Wyrażenie $\frac{p}{p+n}$ odpowiada wartości x w definicji średniej Bayesa, natomiast $(p + n)$, wartości n.
-
-Przydatność recenzji nie zależy jednak tylko od głosów oddanych przez użytkowników. Jednym z dodatkowych czynników jest domyślna przydatność recenzji, będąca średnią arytmetyczną przydatności wszystkich recenzji w systemie. Wartość ta odpowiada wartości domyślnej m w przedstawionej wcześniej koncepcji średniej Bayesa i również występuje wraz ze stałą wartością C, która została dobrana eksperymentalnie.
-
-Ostatnim czynnikiem wpływającym na użyteczność recenzji jest ocena autora wyrażona jako iloczyn stosunku liczby głosów pozytywnych do wszystkich oddanych na recenzje danego użytkownika oraz łącznej liczby głosów oddanych na jego recenzje. Obecność oceny autora we wzorze, jest zabezpieczeniem systemu przed zalewem treści sponsorowanych. Publikujący je użytkownik otrzyma negatywne głosy, które obniżą jego ocenę, dzięki czemu przydatność wszystkich jego recenzji również zostanie zmniejszona, a tym samym istnieje mniejsze prawdopodobieństwo, że dotrą do użytkownika końcowego, poszukującego rzetelnych informacji o produkcie. 
-
-Wszystkim czynnikom składającym się na przydatność recenzji zostały dodatkowo przypisane wagi, tak aby można było kontrolować ich wpływ na obliczaną wartość.
-
-Warto zauważyć, że przytoczony wzór można łatwo zredukować to prostszej postaci:
-
-\begin{equation}
-\bar{x_{R}}=\frac{w_{m}Cm+w_{g}{p}+w_{a}p_{a}}{w_{m}C+w_{g}(p+n)+w_{a}(p_{a}+n_{a})}*100\%
-\end{equation}\\
-
-Uproszczona w ten sposób formuła została zaimplementowana w naszej aplikacji.
-
-Kolejnym wartością której obliczanie bazuje na koncepcji średniej Bayesa jest ranga recenzenta. Dzięki niej użytkownik uzyskuje poglądową informację o ogólnej jakości wszystkich recenzji napisanych przez użytkownika. Wartość ta obliczana jest według przedstawionego poniżej wzoru:
-
-\begin{equation}
-\bar{x_{U}}=\frac{w_{ma}C_{a}m_{a}+w_{a}p_{a}}{w_{ma}C_{a}+w_{g}(p+n)+w_{a}(p_{a}+n_{a})}*100\%
-\end{equation}
-gdzie:\\
-$m_{a}$ - domyślna ocena użytkownika, równa 0,5\\
-$C_{a}$ - stała dobrana eksperymentalnie\\
-$p_{a}$ - liczba głosów pozytywnych oddanych na wszystkie recenzje autora recenzji R\\
-$n_{a}$ - liczba głosów negatywnych oddanych na wszystkie recenzje autora recenzji R\\
-$w_{ma}$ - waga domyślnej oceny użytkownika\\
-$w_{a}$ - waga głosów oddanych na recenzje autora recenzji R\\
-
-Wyliczona w ten ocena użytkownika mapowana jest na jedną z dostępnych rang, zależnie od wartości. Poniżej przedstawiono tabelę z rangami dostępnymi w systemie wraz z odpowiadającymi im zakresami wartości wyliczonej za pomocą przedstawionego wcześniej wzoru.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|c||c|}  
-\hline
-\textbf{Ranga} & \textbf{Wartość [\%]} \\
-\hline\hline
-\textbf{Niekompetentny} & 0-20 \\  
-\hline
-\textbf{Niezaufany} & 20-40 \\  
-\hline
-\textbf{Przeciętny} & 40-60 \\  
-\hline
-\textbf{Godny zaufania} & 60-80 \\  
-\hline
-\textbf{Ekspert} & 80-100 \\  
-\hline
-\end{tabular}
-\caption{Rangi użytkowników}
-\end{table}
-
-
-
 
 \section{Użyte technologie}
 Projekt został stworzony przy użyciu technologii webowych, aby umożliwić swobodną korzystanie z aplikacji z wykorzystaniem przeglądarki internetowej. Do stworzenia projektu zostały użyte:
