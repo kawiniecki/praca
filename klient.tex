@@ -74,7 +74,7 @@ Naszym rozszerzeniem powyższej architektury jest dodanie warstwy usług, które
 
 
 \section{Dynamiczne style CSS}
-W projekcie do opisu formy prezentacji widoku strony klienckiej użyto dynamicznych arkuszy stylów – LESS. Głównym zadaniem LESS jest rozszerzenie możliwości CSS (ang. Cascading Style Sheets) między innymi o takie elementy jak możliwość definiowania zmiennych i funkcji, łatwe zagnieżdżanie selektorów czy proste operacje. Wszystko to zostaje później podczas ładowania strony przekompilowane na zwykły kod CSS, tak by był on zrozumiały dla przeglądarek. CSS czyli kaskadowy arkusz styli pozwala dodać graficzny układ do strony internetowej. Określają one wygląd różnych elementów HTML znajdujących się na danej stronie internetowej. 
+W projekcie do opisu formy prezentacji widoku strony klienckiej użyto dynamicznych arkuszy stylów – LESS (ang. \textit{Leaner CSS}). Głównym zadaniem LESS jest rozszerzenie możliwości CSS (ang. \textit{Cascading Style Sheets}) między innymi o takie elementy jak możliwość definiowania zmiennych i funkcji, łatwe zagnieżdżanie selektorów czy proste operacje. Wszystko to zostaje później podczas ładowania strony przekompilowane na zwykły kod CSS, tak by był on zrozumiały dla przeglądarek. CSS czyli kaskadowy arkusz styli pozwala dodać graficzny układ do strony internetowej. Określają one wygląd różnych elementów HTML znajdujących się na danej stronie internetowej. 
 LESS ma przewagę nad CSS, ponieważ zmienne pozwalają na zdefiniowanie wartości na przykład koloru czy szerokości w jednym miejscu, które następnie można wykorzystać w obrębie całego arkusza stylów. Umożliwia to globalne zmiany poprzez modyfikację jednej linijki kodu. Jest to bardzo wygodne rozwiązanie. 
 
 \begin{figure}[h]
@@ -83,7 +83,7 @@ LESS ma przewagę nad CSS, ponieważ zmienne pozwalają na zdefiniowanie wartoś
 	\caption{Przykładowy kod LESS i wygenerowany z niego kod CSS}
 \end{figure}
 \paragraph{}
-W zwykłym pliku CSS, gdy jest potrzeba zmiany na przykład jakiegoś koloru na inny, trzeba ręcznie tą wartość zmienić w każdym miejscu arkusza stylów, w którym się pojawia. Jest to czasochłonne, dlatego przy budowie projektu zrezygnowano z tego rozwiązania na rzecz LESS. 
+W zwykłym pliku CSS, gdy jest potrzeba zmiany na przykład jakiegoś koloru na inny, trzeba ręcznie tą wartość zmienić w każdym miejscu arkusza stylów, w którym się pojawia \cite{cssBook}. Jest to czasochłonne, dlatego przy budowie projektu zrezygnowano z tego rozwiązania na rzecz LESS. 
 W dynamicznych arkuszach styli można tworzyć również tak zwane „domieszki”. Domieszki to inaczej dziedziczenie przez dopisanie wartości do wszystkich właściwości danej klasy w innej klasie, poprzez wykorzystanie nazwy klasy jako jednej z wartości innej klasy. Zasada działania jest podoba do zmiennych, przy czym domieszki dotyczą całej konkretnej klasy. Domieszki mogą również działać jak funkcje i przyjmować argumenty, tak jak w poniższym przykładzie.
 
 \begin{figure}[h]
