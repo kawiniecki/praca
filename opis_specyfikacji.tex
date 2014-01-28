@@ -1,103 +1,12 @@
 \chapter{Specyfikacja}
 
+W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygotowanej przez grupę studentów ze specjaności Technologie Wytwarzania Oprogramowania nadzorujących projekt.
+
 \section{Wymagania funkcjonalne}
 
 \begin{table}[H]
     \begin{tabular}{|p{5cm}|p{9cm}|}\hline
-    ID: & UC00 \\ \hline
-    Nazwa: & Dodawanie przedmiotu \\\hline
-    Aktorzy: & Użytkownik zalogwany, System \\\hline
-    Poziom: & Poziom użytkownika  \\\hline
-    Priorytet: & Wysoki \\\hline
-    Warunki początkowe: & ~ \\\hline
-    Scenariusz główny: & 1. Użytkownik wybiera opcję dodania produktu do bazy danych systemu. \\
-    ~ & 2. System prosi recenzenta o podanie wymaganych informacji o produkcie. \\
-    ~ & 3. Recenzent podaje wszystkie obowiązkowe dane. \\
-    ~ & 4. Recenzent zatwierdza informacje. \\
-    ~ & 5. System dodaje produkt do bazy danych. \\\hline
-    Scenariusz alternatywny & 3a. Kategoria przedmiotu nie istnieje w systemie: \\
-    i rozszerzenia: & 3a.1. Użytkownik wybiera opcję dodania nowej kategorii. \\
-    ~ & 3a.2. Przejdź do UC04. \\
-    ~ & 3a.3. Powrót do punktu 3. \\
-    ~ & 4a. Podane dane są nieprawidłowe: \\
-    ~ & 4a.1. System prosi o poprawienie błędnych danych. \\
-    ~ & 4a.2. Recenzent wprowadza poprawne dane. \\
-    ~ & 4a.3. Powrót do punktu 4. \\
-    \hline\end{tabular}
-	\caption{UC00 - Dodawanie przedmiotu}
-\end{table}
-
-\begin{table}[H]
-    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
-	ID: & UC01  \\\hline
-    Nazwa: & Dodawanie recenzji \\\hline
-    Aktorzy: & Recenzent, System \\\hline
-    Poziom: & Poziom użytkownika  \\\hline
-    Priorytet: & Wysoki \\\hline
-    Warunki początkowe: & ~ \\\hline
-    Scenariusz główny: & 1. Recenzent przechodzi na stronę produktu, którego recenzję chce dodać. \\
-    ~ & 2. Recenzent wybiera opcję dodania recenzji produktu. \\
-    ~ & 3. System prezentuje Recenzentowi ekran dodawania recenzji. \\
-    ~ & 4. Recenzent wypełnia formularz dodawania recenzji. \\
-    ~ & 5. Recenzent potwierdza chęć dodania recenzji. \\
-    ~ & 6. System publikuje recenzję w serwisie. \\
-    ~ & ~ \\\hline
-    Scenariusz alternatywny & 1a. Szukany produkt nie istnieje: \\
-    i rozszerzenia: & 1a.1. Przejdź do UC00. \\
-    ~ & 1a.2. Powrót do punktu 1. \\
-    ~ & 2a. Użytkownik jest niezalogowany: \\
-    ~ & 2a.1. Przejdź do UC02. \\
-    ~ & 2a.2. Przejdź do punktu 3. \\
-    ~ & 5a. Formularz wypełniono nieprawidłowo (np. nie wypełniono wszystkich obowiązkowych pól): \\
-    ~ & 5a.1. System prosi o poprawienie błędnych danych. \\
-    ~ & 5a.2. Recenzent wprowadza poprawne dane. \\
-    ~ & 5a.3. Przejdź do punktu 5. \\
-    \hline\end{tabular}
-	\caption{UC01 - Dodawanie recenzji}
-\end{table}
-
-\begin{table}[H]
-    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
-    ID: & UC02 \\\hline
-    Nazwa: & Logowanie do serwisu \\\hline
-    Aktorzy: & System, Użytkownik niezalogowany \\\hline
-    Poziom: & Poziom użytkownika  \\\hline
-    Priorytet: & Wysoki \\\hline
-    Warunki początkowe: & ~ \\\hline
-    Scenariusz główny: & 1. System prezentuje formularz logowania \\
-    ~ & 2. Użytkownik wprowadza swoje dane \\
-    ~ & 3. System dokonuje uwierzytelnienia użytkownika \\ \hline
-    Scenariusz alternatywny & 2a. Podane dane są niepoprawne \\
-    i rozszerzenia: & 2a.1. System informuje o błędnych danych logowania \\
-    ~ & 2a.2. Powrót do punktu 1 \\
-    ~ & 2b. Użytkownik nie posiada konta w systemie \\
-    ~ & 2b.1. Przejdź do UC03. \\
-    ~ & 2b.2. Powrót do punktu 1.  \\
-    \hline\end{tabular}
-	\caption{UC02 - Logowanie do serwisu}
-\end{table}
-
-\begin{table}[H]
-    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
-    ID: & UC03 \\\hline
-    Nazwa: & Rejestracja w serwisie \\\hline
-    Aktorzy: & System, Użytkownik niezalogowany \\\hline
-    Poziom: & Poziom użytkownika  \\\hline
-    Priorytet: & Wysoki \\\hline
-    Warunki początkowe: & ~ \\\hline
-    Scenariusz główny: & 1. System prezentuje formularz rejestracji \\
-    ~ & 2. Użytkownik wprowadza swoje dane \\
-    ~ & 3. System tworzy konto Użytkownika \\\hline
-    Scenariusz alternatywny & 2a. Podane dane są niepoprawne \\
-    i rozszerzenia: & 2a.1. System informuje o błędnych danych rejestracyjnych \\
-    ~ & 2a.2. Powrót do punktu 1 \\
-    \hline\end{tabular}
-	\caption{UC03 - Rejestracja w serwisie}
-\end{table}
-\newpage
-\begin{table}[H]
-    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
-	ID: & UC04 \\\hline
+	ID: & UC00 \\\hline
     Nazwa: & Dodawanie kategorii \\\hline
     Aktorzy: & Użytkownik zalogowany, System \\\hline
     Poziom: & Poziom użytkownika  \\\hline
@@ -113,9 +22,102 @@
     ~ & 4a.2. Użytkownik wprowadza poprawne dane. \\
     ~ & 4a.4. Powrót do punktu 4 \\
     \hline\end{tabular}
-	\caption{UC04 - Dodawanie kategorii}
+	\caption{UC00 - Dodawanie kategorii}
 \end{table}
 
+\begin{table}[H]
+    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
+    ID: & UC01 \\ \hline
+    Nazwa: & Dodawanie przedmiotu \\\hline
+    Aktorzy: & Użytkownik zalogwany, System \\\hline
+    Poziom: & Poziom użytkownika  \\\hline
+    Priorytet: & Wysoki \\\hline
+    Warunki początkowe: & ~ \\\hline
+    Scenariusz główny: & 1. Użytkownik wybiera opcję dodania produktu do bazy danych systemu. \\
+    ~ & 2. System prosi recenzenta o podanie wymaganych informacji o produkcie. \\
+    ~ & 3. Recenzent podaje wszystkie obowiązkowe dane. \\
+    ~ & 4. Recenzent zatwierdza informacje. \\
+    ~ & 5. System dodaje produkt do bazy danych. \\\hline
+    Scenariusz alternatywny & 3a. Kategoria przedmiotu nie istnieje w systemie: \\
+    i rozszerzenia: & 3a.1. Użytkownik wybiera opcję dodania nowej kategorii. \\
+    ~ & 3a.2. Przejdź do UC00. \\
+    ~ & 3a.3. Powrót do punktu 3. \\
+    ~ & 4a. Podane dane są nieprawidłowe: \\
+    ~ & 4a.1. System prosi o poprawienie błędnych danych. \\
+    ~ & 4a.2. Recenzent wprowadza poprawne dane. \\
+    ~ & 4a.3. Powrót do punktu 4. \\
+    \hline\end{tabular}
+	\caption{UC01 - Dodawanie przedmiotu}
+\end{table}
+
+\begin{table}[H]
+    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
+	ID: & UC02  \\\hline
+    Nazwa: & Dodawanie recenzji \\\hline
+    Aktorzy: & Recenzent, System \\\hline
+    Poziom: & Poziom użytkownika  \\\hline
+    Priorytet: & Wysoki \\\hline
+    Warunki początkowe: & ~ \\\hline
+    Scenariusz główny: & 1. Recenzent przechodzi na stronę produktu, którego recenzję chce dodać. \\
+    ~ & 2. Recenzent wybiera opcję dodania recenzji produktu. \\
+    ~ & 3. System prezentuje Recenzentowi ekran dodawania recenzji. \\
+    ~ & 4. Recenzent wypełnia formularz dodawania recenzji. \\
+    ~ & 5. Recenzent potwierdza chęć dodania recenzji. \\
+    ~ & 6. System publikuje recenzję w serwisie. \\
+    ~ & ~ \\\hline
+    Scenariusz alternatywny & 1a. Szukany produkt nie istnieje: \\
+    i rozszerzenia: & 1a.1. Przejdź do UC01. \\
+    ~ & 1a.2. Powrót do punktu 1. \\
+    ~ & 2a. Użytkownik jest niezalogowany: \\
+    ~ & 2a.1. Przejdź do UC03. \\
+    ~ & 2a.2. Przejdź do punktu 3. \\
+    ~ & 5a. Formularz wypełniono nieprawidłowo (np. nie wypełniono wszystkich obowiązkowych pól): \\
+    ~ & 5a.1. System prosi o poprawienie błędnych danych. \\
+    ~ & 5a.2. Recenzent wprowadza poprawne dane. \\
+    ~ & 5a.3. Przejdź do punktu 5. \\
+    \hline\end{tabular}
+	\caption{UC02 - Dodawanie recenzji}
+\end{table}
+
+\begin{table}[H]
+    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
+    ID: & UC03 \\\hline
+    Nazwa: & Logowanie do serwisu \\\hline
+    Aktorzy: & System, Użytkownik niezalogowany \\\hline
+    Poziom: & Poziom użytkownika  \\\hline
+    Priorytet: & Wysoki \\\hline
+    Warunki początkowe: & ~ \\\hline
+    Scenariusz główny: & 1. System prezentuje formularz logowania \\
+    ~ & 2. Użytkownik wprowadza swoje dane \\
+    ~ & 3. System dokonuje uwierzytelnienia użytkownika \\ \hline
+    Scenariusz alternatywny & 2a. Podane dane są niepoprawne \\
+    i rozszerzenia: & 2a.1. System informuje o błędnych danych logowania \\
+    ~ & 2a.2. Powrót do punktu 1 \\
+    ~ & 2b. Użytkownik nie posiada konta w systemie \\
+    ~ & 2b.1. Przejdź do UC04. \\
+    ~ & 2b.2. Powrót do punktu 1.  \\
+    \hline\end{tabular}
+	\caption{UC03 - Logowanie do serwisu}
+\end{table}
+
+\begin{table}[H]
+    \begin{tabular}{|p{5cm}|p{9cm}|}\hline
+    ID: & UC04 \\\hline
+    Nazwa: & Rejestracja w serwisie \\\hline
+    Aktorzy: & System, Użytkownik niezalogowany \\\hline
+    Poziom: & Poziom użytkownika  \\\hline
+    Priorytet: & Wysoki \\\hline
+    Warunki początkowe: & ~ \\\hline
+    Scenariusz główny: & 1. System prezentuje formularz rejestracji \\
+    ~ & 2. Użytkownik wprowadza swoje dane \\
+    ~ & 3. System tworzy konto Użytkownika \\\hline
+    Scenariusz alternatywny & 2a. Podane dane są niepoprawne \\
+    i rozszerzenia: & 2a.1. System informuje o błędnych danych rejestracyjnych \\
+    ~ & 2a.2. Powrót do punktu 1 \\
+    \hline\end{tabular}
+	\caption{UC04 - Rejestracja w serwisie}
+\end{table}
+\newpage
 \begin{table}[H]
     \begin{tabular}{|p{5cm}|p{9cm}|}\hline
     ID: & UC05 \\\hline
@@ -131,7 +133,7 @@
     \hline\end{tabular}
 	\caption{UC05 - Przeglądanie profilu recenzenta}
 \end{table}
-\newpage
+
 \begin{table}[H]
     \begin{tabular}{|p{5cm}|p{9cm}|}\hline
     ID: & UC06 \\\hline
@@ -148,7 +150,7 @@
     \hline\end{tabular}
 	\caption{UC06 - Przeglądanie listy recenzji produktu}
 \end{table}
-
+\newpage
 \begin{table}[H]
     \begin{tabular}{|p{5cm}|p{9cm}|}\hline
     ID: & UC07 \\\hline
@@ -167,7 +169,7 @@
 	\hline\end{tabular}
 	\caption{UC07 - Przeglądanie produktów}
 \end{table}
-\newpage
+
 \begin{table}[H]
     \begin{tabular}{|p{5cm}|p{9cm}|}\hline
     ID: & UC08 \\\hline
@@ -198,7 +200,7 @@
     ~ & 2. Użytkownik wybiera opcję zasubskrybowania tego produktu \\
     ~ & 3. System okresowo wysyła użytkownikowi informacje o nowych recenzjach tego produktu \\\hline
     Scenariusz alternatywny & 2a. Użytkownik nie jest zalogowany \\
-    i rozszerzenia: & 2a.1. System prosi o zalogowanie (UC02) \\
+    i rozszerzenia: & 2a.1. System prosi o zalogowanie (UC03) \\
     ~ & 2a.2. Powrót do punktu 2  \\
     \hline\end{tabular}
 	\caption{UC09 - Subskrybcja produktu}
@@ -216,7 +218,7 @@
     ~ & 2. Użytkownik wybiera opcję zasubskrybowania tego recenzenta \\
     ~ & 3. System okresowo wysyła użytkownikowi informacje o nowych recenzjach tego recenzenta \\\hline
     Scenariusz alternatywny & 2a. Użytkownik nie jest zalogowany \\
-    i rozszerzenia: & 2a.1. System prosi o zalogowanie (UC02) \\
+    i rozszerzenia: & 2a.1. System prosi o zalogowanie (UC03) \\
     ~ & 2a.2. Powrót do punktu 2  \\
     \hline\end{tabular}
 	\caption{UC10 - Subskrypcja recenzenta}
@@ -294,5 +296,5 @@
 	\includegraphics[scale=0.9]{images/warstwy.png}
 	\caption{Warstwy implementacyjne}
 \end{figure}
-
+\newpage
 
