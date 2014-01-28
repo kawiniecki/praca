@@ -110,16 +110,16 @@ Najważniejsze zastosowania techniki AJAX w aplikacji revCommunity:
 	\includegraphics[scale=0.7]{images/Kategorie.png}
 	\caption{Dynamiczne drzewo kategorii}
 \end{figure}
-\item\textbf{Stronicowanie (ang. paging) i sortowanie.} Ze względu na nieograniczone możliwości rozbudowy drzewa kategorii, komponent ten został zorganizowany w taki sposób, by żądane elementy pobierać tylko wtedy, gdy zachodzi konieczność ich prezentacji.
+\item\textbf{Stronicowanie (ang. paging) i sortowanie.} W przeciwieństwie do alternatywnego podejścia, zakładającego ładowanie wszystkich danych jednocześnie, stronicowanie pozwala na ładowanie tylko tych rekordów, które w danym momencie są wyświetlane. W celu zapewnienia wysokiej interaktywności i zmniejszenia czasu odpowiedzi, wyświetlane dane zorganizowane są w strony (grupy rekordów), które mogą być ładowane na żądanie użytkownika. Ma to szczególne znaczenie podczas pracy z komponentami operującymi na stosunkowo dużych zbiorach danych, takimi jak listy czy tabele.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{images/paging.png}
 	\caption{Stronicowanie listy produktów}
 \end{figure}
-\item\textbf{Współbieżne ładowanie danych przez komponenty widoku.} Przykładem takiego zastosowania techniki AJAX jest ekran startowy aplikacji, w którym zarówno lista produktów, lista recenzji, jak i widok polecanych użytkowników ładowane są niezależnie.
+\item\textbf{Współbieżne ładowanie danych przez komponenty widoku.} Przykładem takiego zastosowania techniki AJAX jest ekran startowy, w którym zarówno lista produktów, lista recenzji, jak i widok polecanych użytkowników ładowane są niezależnie.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{images/Loading.png}
+	\includegraphics[width=\textwidth]{images/Loading.png}
 	\caption{Współbieżne ładowanie danych}
 \end{figure}
 \end{itemize}
@@ -131,15 +131,11 @@ Wspomniany problem można jednak rozwiązać przy wykorzystaniu dodatkowych narz
 
 Przykłady reguł routingu w aplikacji revCommunity:
 
-\begin{lstlisting}
-routes : {
-	'':'home',
-	'category/new':'newCategory',
-	'products/filter/:categoryId':'filterProducts',
-	'products/:id':'product',
-	'reviews/:id':'review',
-},
-\end{lstlisting}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/routes.png}
+	\caption{Przykłady reguł routingu w aplikacji revCommunity}
+\end{figure}
 
 Każda reguła zbudowana jest według schematu [wzorzec] : [nazwa\_funkcji]. W momencie zmiany adresu url w przeglądarce, pobierana jest jego część znajdująca się za znakiem \textbf{\#}, która następnie poddawana jest próbie dopasowania do kolejnych wzorców. W przypadku udanego przypasowania, wywoływana jest funkcja o nazwie podanej w drugiej części reguły.
 

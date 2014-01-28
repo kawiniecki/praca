@@ -210,6 +210,35 @@ Przedstawiony poniżej wykres \ref{fig:test3} ukazuje wpływ liczby kłamców na
 
 Jak widać na powyższym wykresie, wzrost liczby oszustów w systemie skutkuje wzrostem wartości błędu niezależnie od liczby użytkowników. Ponadto, warto zauważyć, że przy dziesięcioprocentowym udziale oszustów w systemie wartość błędu różni się nieznacznie od wartości błędu w sytuacji gdy wszyscy użytkownicy są rzetelni.
 
+\subsection{Testowanie z wykorzystaniem arkusza kalkulacyjnego}
+
+Przedstawiona poniżej tabela \ref{tab:test1} opracowana została na podstawie obliczeń wykonanych za pomocą arkusza kalkulacyjnego i zawiera najważniejsze informacje dotyczące recenzji: liczbę oddanych głosów, liczbę głosów pozytywnych i przydatność wyliczoną na podstawie wzoru \ref{eq:przydatnosc}. Zastosowanie arkusza kalkulacyjnego pozwoliło na manualny dobór liczby głosów, średniej systemu i ogólnej oceny recenzenta, dzięki czemu możliwe było przetestowanie charakterystycznych przypadków. Przedstawione wyniki dotyczą systemu, w którym średnia przydatność wynosi 50\%, a wszyscy recenzenci mają identyczną ocenę i liczbę otrzymanych głosów. Wartości pozostałych parametrów wynoszą odpowiednio: $C=15$, $w_{m}=1$, $w_{g}=8$, $w_{a}=3$.
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    lp. & liczba głosów & liczba głosów pozytywnych & przydatność [\%] \\ \hline\hline
+    1. & 1 & 1 & 71,28 \\ \hline
+    2. & 3 & 3 & 78,57 \\ \hline
+    3. & 5 & 5 & 82,91 \\ \hline
+    4. & 9 & 9 & 87,84 \\ \hline
+    5. & 15 & 15 & 91,51 \\ \hline
+    6. & 20 & 20 & 93,22 \\ \hline
+    7. & 3 & 0 & 40,47 \\ \hline
+    8. & 5 & 0 & 32,27 \\ \hline
+    9. & 10 & 0 & 21,42 \\ \hline
+    \end{tabular}
+	\caption{Rezultaty eksperymentu}\label{tab:test1}
+\end{table}
+
+Pozycje 1. - 6. dotyczą sytuacji, w której wszystkie głosy oddane na recenzję są pozytywne. W tradycyjnym podejściu, znanym z istniejących serwisów, przydatność wynosiłaby wtedy 100\%. Dzięki zastosowaniu średniej Bayesa, wartość przydatności normalizowana jest przez średnią przydatność systemu, a istotność głosów rośnie wraz z ich liczbą. Zatem by posiadać większą przydatność recenzja musi posiadać więcej głosów, nawet jeżeli wszystkie są pozytywne. Pozwala to uniknąć sytuacji znanej z istniejących serwisów, gdzie jeden głos pozytywny powoduje umieszczenie produktu na szczycie rankingu.
+
+Istotność średniej przydatności w systemie, czyli to jak mocno odziałuje ona na pozostałe składowe, okresla się za pomocą stałej C, uwzględnionej we wzorze \ref{eq:przydatnosc} oraz dodatkowo za pomocą wag odnoszących się do poszczególnych składników.
+
+Pozycje 7. - 9. dotyczą sytuacji gdy wszystkie głosy oddane na recenzję są negatywne. W tym przypdaku średnia Bayesa działa analogicznie, normalizując przydatność w kierunku wartości średniej.
+
+
 \section{Implementacja}
 
 W celu implementacji algorytmu rankingowego stworzone zostały metody pozwalające obliczyć przydatność recenzji i ocenę recenzenta, a także metody pomocnicze obliczające ich składowe. Przydatność recenzji oraz ocena autora zrealizowane zostały jako pola, odpowiednio w klasach Review i User, których obiekty przechowywane są w bazie danych. Umożliwiło nam to przede wszystkim efektywne sortowanie danych na poziomie bazy danych. Wspomniane wartości obliczane są za każdym razem gdy któryś z użytkowników odda głos na recenzję. Część kliencka aplikacji rozpoczyna wtedy asynchroniczną komunikację z serwerem i wysyła informację o typie głosu, identyfikatorze recenzji i nazwie użytkownika oddającego głos. Na serwerze, dane przetwarzane są w ramach jednej transakcji\cite{springAction}, dzięki czemu zachowana jest ich spójność. Głos zostaje skojarzony z zalogowanym użytkownikiem i ocenioną recenzją, a następnie obliczana jest nowa wartość użyteczności recenzji i rangi jej autora. Wartości te są następnie przesyłane do warstwy klienckiej i  prezentowane użytkownikowi.
