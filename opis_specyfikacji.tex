@@ -12,13 +12,13 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     Poziom: & Poziom użytkownika  \\\hline
     Priorytet: & Średni \\\hline
     Warunki początkowe: & ~ \\\hline
-    Scenariusz główny: & 1. System prezentuje ekran z formularzem dodawania kategorii \\
-    ~ & 2. System prosi Użytkownika o podanie wymaganych informacji o kategorii \\
+    Scenariusz główny: & 1. System prezentuje ekran z~formularzem dodawania kategorii \\
+    ~ & 2. System prosi Użytkownika o~podanie wymaganych informacji o~kategorii \\
     ~ & 3. Użytkownik podaje wszystkie obowiązkowe dane \\
     ~ & 4. Użytkownik zatwierdza operację \\
     ~ & 5. System dodaje kategorię \\\hline
     Scenariusz alternatywny & 4a. Podane dane są nieprawidłowe \\
-    i rozszerzenia: & 4a.1. System prosi o poprawienie błędnych danych \\
+    i~rozszerzenia: & 4a.1. System prosi o~poprawienie błędnych danych \\
     ~ & 4a.2. Użytkownik wprowadza poprawne dane. \\
     ~ & 4a.4. Powrót do punktu 4 \\
     \hline\end{tabular}
@@ -34,16 +34,16 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     Priorytet: & Wysoki \\\hline
     Warunki początkowe: & ~ \\\hline
     Scenariusz główny: & 1. Użytkownik wybiera opcję dodania produktu do bazy danych systemu. \\
-    ~ & 2. System prosi recenzenta o podanie wymaganych informacji o produkcie. \\
+    ~ & 2. System prosi recenzenta o~podanie wymaganych informacji o~produkcie. \\
     ~ & 3. Recenzent podaje wszystkie obowiązkowe dane. \\
     ~ & 4. Recenzent zatwierdza informacje. \\
     ~ & 5. System dodaje produkt do bazy danych. \\\hline
-    Scenariusz alternatywny & 3a. Kategoria przedmiotu nie istnieje w systemie: \\
-    i rozszerzenia: & 3a.1. Użytkownik wybiera opcję dodania nowej kategorii. \\
+    Scenariusz alternatywny & 3a. Kategoria przedmiotu nie istnieje w~systemie: \\
+    i~rozszerzenia: & 3a.1. Użytkownik wybiera opcję dodania nowej kategorii. \\
     ~ & 3a.2. Przejdź do UC00. \\
     ~ & 3a.3. Powrót do punktu 3. \\
     ~ & 4a. Podane dane są nieprawidłowe: \\
-    ~ & 4a.1. System prosi o poprawienie błędnych danych. \\
+    ~ & 4a.1. System prosi o~poprawienie błędnych danych. \\
     ~ & 4a.2. Recenzent wprowadza poprawne dane. \\
     ~ & 4a.3. Powrót do punktu 4. \\
     \hline\end{tabular}
@@ -63,16 +63,16 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     ~ & 3. System prezentuje Recenzentowi ekran dodawania recenzji. \\
     ~ & 4. Recenzent wypełnia formularz dodawania recenzji. \\
     ~ & 5. Recenzent potwierdza chęć dodania recenzji. \\
-    ~ & 6. System publikuje recenzję w serwisie. \\
+    ~ & 6. System publikuje recenzję w~serwisie. \\
     ~ & ~ \\\hline
     Scenariusz alternatywny & 1a. Szukany produkt nie istnieje: \\
-    i rozszerzenia: & 1a.1. Przejdź do UC01. \\
+    i~rozszerzenia: & 1a.1. Przejdź do UC01. \\
     ~ & 1a.2. Powrót do punktu 1. \\
     ~ & 2a. Użytkownik jest niezalogowany: \\
     ~ & 2a.1. Przejdź do UC03. \\
     ~ & 2a.2. Przejdź do punktu 3. \\
     ~ & 5a. Formularz wypełniono nieprawidłowo (np. nie wypełniono wszystkich obowiązkowych pól): \\
-    ~ & 5a.1. System prosi o poprawienie błędnych danych. \\
+    ~ & 5a.1. System prosi o~poprawienie błędnych danych. \\
     ~ & 5a.2. Recenzent wprowadza poprawne dane. \\
     ~ & 5a.3. Przejdź do punktu 5. \\
     \hline\end{tabular}
@@ -91,9 +91,9 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     ~ & 2. Użytkownik wprowadza swoje dane \\
     ~ & 3. System dokonuje uwierzytelnienia użytkownika \\ \hline
     Scenariusz alternatywny & 2a. Podane dane są niepoprawne \\
-    i rozszerzenia: & 2a.1. System informuje o błędnych danych logowania \\
+    i~rozszerzenia: & 2a.1. System informuje o~błędnych danych logowania \\
     ~ & 2a.2. Powrót do punktu 1 \\
-    ~ & 2b. Użytkownik nie posiada konta w systemie \\
+    ~ & 2b. Użytkownik nie posiada konta w~systemie \\
     ~ & 2b.1. Przejdź do UC04. \\
     ~ & 2b.2. Powrót do punktu 1.  \\
     \hline\end{tabular}
@@ -103,7 +103,7 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
 \begin{table}[H]
     \begin{tabular}{|p{5cm}|p{9cm}|}\hline
     ID: & UC04 \\\hline
-    Nazwa: & Rejestracja w serwisie \\\hline
+    Nazwa: & Rejestracja w~serwisie \\\hline
     Aktorzy: & System, Użytkownik niezalogowany \\\hline
     Poziom: & Poziom użytkownika  \\\hline
     Priorytet: & Wysoki \\\hline
@@ -112,10 +112,10 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     ~ & 2. Użytkownik wprowadza swoje dane \\
     ~ & 3. System tworzy konto Użytkownika \\\hline
     Scenariusz alternatywny & 2a. Podane dane są niepoprawne \\
-    i rozszerzenia: & 2a.1. System informuje o błędnych danych rejestracyjnych \\
+    i~rozszerzenia: & 2a.1. System informuje o~błędnych danych rejestracyjnych \\
     ~ & 2a.2. Powrót do punktu 1 \\
     \hline\end{tabular}
-	\caption{UC04 - Rejestracja w serwisie}
+	\caption{UC04 - Rejestracja w~serwisie}
 \end{table}
 \newpage
 \begin{table}[H]
@@ -127,7 +127,7 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     Priorytet: & Niski \\\hline
     Warunki początkowe: & ~ \\\hline
     Scenariusz główny: & 1. Użytkownik wybiera opcję wyświetlenia profilu danego recenzenta (w tym swojego) \\
-    ~ & 2. System prezentuje ekran profilu, wyświetlając informacje o Recenzencie oraz listę jego recenzji \\\hline
+    ~ & 2. System prezentuje ekran profilu, wyświetlając informacje o~Recenzencie oraz listę jego recenzji \\\hline
     Scenariusz alternatywny & ~ \\
 	i rozszerzenia: & ~ \\
     \hline\end{tabular}
@@ -159,13 +159,13 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     Poziom: & Poziom użytkownika  \\\hline
     Priorytet: & Wysoki \\\hline
     Warunki początkowe: & ~ \\\hline
-    Scenariusz główny: & 1. System wyświetla listę najnowszych recenzji i produktów \\
+    Scenariusz główny: & 1. System wyświetla listę najnowszych recenzji i~produktów \\
     ~ & 2. Użytkownik wpisuje pożądane wartości flitrów, wg których chce ograniczyć listę produktów (nazwę produktu lub jego parametry) \\
     ~ & 3. System zastępuje listę najnowszych pozycji listą produktów dopasowanych do kryteriów wyszukiwania \\
     ~ & 4. Użytkownik wybiera konkretny produkt \\
     ~ & 5. System prezentuje listę recenzji wybranego produktu (UC06) \\\hline
     Scenariusz alternatywny & 2a. Użytkownik nie wpisuje żadnego ograniczenia \\
-    i rozszerzenia: & 2a.1. Użytkownik wybiera jedną z przedstawionych najnowszych pozycji (UC06 lub UC08) \\
+    i~rozszerzenia: & 2a.1. Użytkownik wybiera jedną z~przedstawionych najnowszych pozycji (UC06 lub UC08) \\
 	\hline\end{tabular}
 	\caption{UC07 - Przeglądanie produktów}
 \end{table}
@@ -178,11 +178,11 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     Poziom: & Poziom użytkownika  \\\hline
     Priorytet: & Wysoki \\\hline
     Warunki początkowe: & ~ \\\hline
-    Scenariusz główny: & 1. System prezentuje ekran konkretnej recenzji, z jej treścią, oceną końcową oraz komentarzami do recenzji \\
+    Scenariusz główny: & 1. System prezentuje ekran konkretnej recenzji, z~jej treścią, oceną końcową oraz komentarzami do recenzji \\
     ~ & 2. Użytkownik ocenia przydatność recenzji poprzez kliknięcie odpowiedniego przycisku \\
     ~ & 3. Użytkownik przegląda komentarze do recenzji \\\hline
     Scenariusz alternatywny & 2a. Użytkownik nie ocenia przydatności recenzji \\
-    i rozszerzenia: & 3a. Użytkownik dodaje własny komentarz \\
+    i~rozszerzenia: & 3a. Użytkownik dodaje własny komentarz \\
     ~ & 3b. Użytkownik oznacza istniejący komentarz jako spam \\
     \hline\end{tabular}
 	\caption{UC08 - Przeglądanie konkretnej recenzji}
@@ -198,9 +198,9 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     Warunki początkowe: & ~ \\\hline
     Scenariusz główny: & 1. Użytkownik wchodzi na stronę ekran konkretnego produktu \\
     ~ & 2. Użytkownik wybiera opcję zasubskrybowania tego produktu \\
-    ~ & 3. System okresowo wysyła użytkownikowi informacje o nowych recenzjach tego produktu \\\hline
+    ~ & 3. System okresowo wysyła użytkownikowi informacje o~nowych recenzjach tego produktu \\\hline
     Scenariusz alternatywny & 2a. Użytkownik nie jest zalogowany \\
-    i rozszerzenia: & 2a.1. System prosi o zalogowanie (UC03) \\
+    i~rozszerzenia: & 2a.1. System prosi o~zalogowanie (UC03) \\
     ~ & 2a.2. Powrót do punktu 2  \\
     \hline\end{tabular}
 	\caption{UC09 - Subskrybcja produktu}
@@ -216,9 +216,9 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
     Warunki początkowe: & ~ \\\hline
     Scenariusz główny: & 1. Użytkownik wchodzi na stronę ekran profilu recenzenta \\
     ~ & 2. Użytkownik wybiera opcję zasubskrybowania tego recenzenta \\
-    ~ & 3. System okresowo wysyła użytkownikowi informacje o nowych recenzjach tego recenzenta \\\hline
+    ~ & 3. System okresowo wysyła użytkownikowi informacje o~nowych recenzjach tego recenzenta \\\hline
     Scenariusz alternatywny & 2a. Użytkownik nie jest zalogowany \\
-    i rozszerzenia: & 2a.1. System prosi o zalogowanie (UC03) \\
+    i~rozszerzenia: & 2a.1. System prosi o~zalogowanie (UC03) \\
     ~ & 2a.2. Powrót do punktu 2  \\
     \hline\end{tabular}
 	\caption{UC10 - Subskrypcja recenzenta}
@@ -261,21 +261,21 @@ W kolejnych podrozdziałach przedstwione zostały elementy specyfikacji przygoto
 \section{Wymagania pozafunkcjonalne}
 \begin{itemize}
 \item System powinien działać prawidłowo na przeglądarkach Chrome, Opera, Safari, Firefox oraz Internet Explorer
-\item Dane w systemie powinny być przechowywane w grafowej bazie danych
+\item Dane w~systemie powinny być przechowywane w~grafowej bazie danych
 \item Kod źródlowy powinien być stworzony zgodnie ze standardami wybranego języka
 \item Maksymalny czas odpowiedzi systemu powinien być mniejszy niż 3 sek.
-\item Hasła użytkowników powinny być przechowywane w postaci zaszyfrowanej
+\item Hasła użytkowników powinny być przechowywane w~postaci zaszyfrowanej
 \item System powinien uniemożliwiać łatwe podszycie się pod innego użytkownika 
 \item Dane powinny być pobierane do systemu za pośrednictwem zewnętrznego API
-\item Źródło danych powinno być w łatwy sposób podmienialne
+\item Źródło danych powinno być w~łatwy sposób podmienialne
 \item System powinien posiadać modularną strukturę, pozwalającą na łatwą podmianę np. frontendu
 \end{itemize}
 
-\section{Aktorzy i charakterystyka użytkowników}
+\section{Aktorzy i~charakterystyka użytkowników}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth, keepaspectratio=true]{images/Strony_cele.png}
-	\caption{Aktorzy i charakterystyka użytkowników}
+	\caption{Aktorzy i~charakterystyka użytkowników}
 \end{figure}
 \section{Struktura programowa}
 \begin{figure}[H]
