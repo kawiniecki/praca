@@ -102,7 +102,7 @@ Wykorzystanie biblioteki Ext JS do budowy klienckiej części aplikacji, umożli
 
 Zastosowanie asynchronicznych wywołań sprawdza się doskonale podczas ładowania danych do graficznych komponentów warstwy widoku, takich jak panele, listy czy tabele. W trakcie pobierania danych do jednego z~komponentów, pozostała część strony pozostaje aktywna i~umożliwia interakcję z~użytkownikiem, w~tym także realizację kolejnych zapytań. Ponadto, po zakończeniu ładowania aktualizowane są tylko te elementy strony, dla których jest to konieczne. Wszystko to ma pozytywny wpływ na poziom interaktywności i~wrażenia końcowego użytkownika aplikacji.
 
-Najważniejsze zastosowania techniki AJAX w~aplikacji revCommunity:
+Najważniejsze zastosowania techniki AJAX w~aplikacji RevCommunity:
 \begin{itemize}
 \item\textbf{Dynamiczne drzewo kategorii.} Ze względu na nieograniczone możliwości rozbudowy drzewa kategorii, komponent ten został zorganizowany w~taki sposób, by żądane elementy pobierać tylko wtedy, gdy zachodzi konieczność ich prezentacji.
 \begin{figure}[H]
@@ -125,11 +125,11 @@ Najważniejsze zastosowania techniki AJAX w~aplikacji revCommunity:
 \end{itemize}
 
 
-Warto także zwrócić uwagę na wady stosowania techniki AJAX. Najważniejszą z~nich jest porzucenie tradycyjnego schematu przeglądania stron z~wykorzystaniem przycisków ,,wstecz'' i~,,dalej'' w~oknie przeglądarki. Wywołanie akcji powodującej modyfikację części zawartości strony nie modyfikuje adresu URL i~nie jest rejestrowane przez mechanizm historii przeglądarki. Dodatkowo, powoduje to, że poszczególne widoki aplikacji, takie jak szczegóły produktu czy lista produktów nie są dostępne pod określonym adresem URL. Pozostaje on niezmieniony przez cały cykl życia aplikacji.\cite{jsadv}
+Warto także zwrócić uwagę na wady stosowania techniki AJAX. Najważniejszą z~nich jest porzucenie tradycyjnego schematu przeglądania stron z~wykorzystaniem przycisków ,,wstecz'' i~,,dalej'' w~oknie przeglądarki. Wywołanie akcji powodującej modyfikację części zawartości strony nie modyfikuje adresu URL i~nie jest rejestrowane przez mechanizm historii przeglądarki. Dodatkowo powoduje to, że poszczególne widoki aplikacji, takie jak szczegóły produktu czy lista produktów nie są dostępne pod określonym adresem URL. Pozostaje on niezmieniony przez cały cykl życia aplikacji.\cite{jsadv}
 
-Wspomniany problem można jednak rozwiązać przy wykorzystaniu dodatkowych narzędzi. Jednym z~nich jest biblioteka Backbone.js umożliwiająca wykorzystanie alternatywnej metody zarządzania historią i~adresami url w~aplikacji internetowej wykorzystującej AJAX. Idea opiera się, na wykorzystaniu w~adresie url znaku \# (ang. hashtag), którego dodanie do istniejącego adresu nie powoduje przeładowania strony.\cite{urls} Obiekt Backbone.Router analizuje tekst znajdujący się za znakiem \# i~na podstawie zdefiniowanych przez programistę reguł wywołuje jedną z~zaimplementowanych funkcji. W systemie revCommunity, funckje te zostały wykorzystane do sterowania widokami aplikacji.\cite{backbone}
+Wspomniany problem można jednak rozwiązać przy wykorzystaniu dodatkowych narzędzi. Jednym z~nich jest biblioteka Backbone.js umożliwiająca wykorzystanie alternatywnej metody zarządzania historią i~adresami url w~aplikacji internetowej wykorzystującej AJAX. Idea opiera się, na wykorzystaniu w~adresie url znaku \# (ang. hashtag), którego dodanie do istniejącego adresu nie powoduje przeładowania strony.\cite{urls} Obiekt Backbone.Router analizuje tekst znajdujący się za znakiem \# i~na podstawie zdefiniowanych przez programistę reguł wywołuje jedną z~zaimplementowanych funkcji. W systemie RevCommunity, funckje te zostały wykorzystane do sterowania widokami aplikacji.\cite{backbone}
 
-Przykłady reguł routingu w~aplikacji revCommunity:
+Przykłady reguł routingu w~aplikacji RevCommunity:
 
 \begin{figure}[H]
 	\centering
@@ -137,8 +137,8 @@ Przykłady reguł routingu w~aplikacji revCommunity:
 	\caption{Przykłady reguł routingu w~aplikacji revCommunity}
 \end{figure}
 
-Każda reguła zbudowana jest według schematu [wzorzec] : [nazwa\_funkcji]. W momencie zmiany adresu url w~przeglądarce, pobierana jest jego część znajdująca się za znakiem \textbf{\#}, która następnie poddawana jest próbie dopasowania do kolejnych wzorców. W przypadku udanego przypasowania, wywoływana jest funkcja o~nazwie podanej w~drugiej części reguły.
+Każda reguła zbudowana jest według schematu [wzorzec] : [nazwa\_funkcji]. W momencie zmiany adresu url w~przeglądarce, pobierana jest jego część, znajdująca się za znakiem \textbf{\#}, która następnie poddawana jest próbie dopasowania do kolejnych wzorców. W przypadku udanego przypasowania, wywoływana jest funkcja o~nazwie podanej w~drugiej części reguły.
 
 Wzorzec może zawierać dodatkowo specjalne wyrażenia ułatwiające manipulację adresami. Jednym z~nich jest użyta w~powyższym przykładzie konstrukcja \textit{'products/filter/:categoryId':'filterProducts'}, dzięki której część dopasowanego adresu url, znajdująca się w~miejscu identyfikatora \textit{':categoryId'} zostanie przekazana do funkcji \textit{filterProducts} jako argument o~nazwie \textit{categoryId}.
 
-Warto również zauważyć, że kolejność reguł ma wpływ na ich późniejszą interpretację. Biblioteka Backbone.js przegląda reguły w~kolejności ich definiowania. W powyższym przykładzie reguła \textit{'products/filter/:categoryId':'filterProducts'} celowo została umieszczona przed regułą \textit{'products/:id':'product'}, poniważ jej wzorzec \textit{'products/filter/:categoryId'} zawiera się we wzorcu \textit{'products/:id'}. Zamiana kolejności wspomnianych reguł spowodowałaby brak możliwości wykorzystania jednej z~nich.\cite{backbone}
+Warto również zauważyć, że kolejność reguł ma wpływ na ich późniejszą interpretację. Biblioteka Backbone.js przegląda reguły w~kolejności ich definiowania. W powyższym przykładzie reguła \textit{'products/filter/:categoryId':'filterProducts'} celowo została umieszczona przed regułą \textit{'products/:id':'product'}, ponieważ jej wzorzec \textit{'products/filter/:categoryId'} zawiera się we wzorcu \textit{'products/:id'}. Zamiana kolejności wspomnianych reguł spowodowałaby brak możliwości wykorzystania jednej z~nich.\cite{backbone}
