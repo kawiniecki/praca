@@ -1,3 +1,5 @@
 Dawid:
 	- Prośba byś skonfrontował plik algorytm z tym co napisałeś
 	- W pliku teoria, który już dodalismy na git'a i jest także w tym folderze, umieszczona jest w tekscie jedna niejasność, prośba o konfrontacje ;-)
+Rosół i Kaziu:
+	- Prośba o skonfrontowanie swojej częsci :p
