@@ -2,6 +2,19 @@
 
 W kolejnych podrozdziałach przedstawione zostały elementy specyfikacji, przygotowanej przez grupę studentów ze specjalności Technologie Wytwarzania Oprogramowania, nadzorujących projekt.
 
+\section{Aktorzy i~charakterystyka użytkowników}
+
+Rysunek \ref{fig:cele} przedstawia najważniejsze cele aktorów systemu RevCommunity.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth, keepaspectratio=true]{images/Strony_cele.png}
+	\caption{Aktorzy i~charakterystyka użytkowników}
+	\label{fig:cele}
+\end{figure}
+
+Działania producentów polegają głównie na udostępnianiu recenzentom swoich produktów w celu ich wypromowania i zwiększenia sprzedaży. Głównymi celami recenzentów (bloggerów) jest zdobywanie popularności i testowanie rynkowych nowości. Pozostali użytkownicy moga wykorzystać system do przeglądania bazy produktów w celu uzyskania o nich rzetelnych opinii. Z systemu mogą korzystać także użytkownicy zewnętrzynch portali, takich jak YouTube, Twitter czy Facebook udostępnijąc swoje materiały szerszej grupie odbiorców. Rysunek uwzględnia także obecnośc zewnętrznych serwisów, takich jak Ceneo czy Nokaut, które udostępniając swoją bazę produktów, odnoszą korzyść w postaci promocji i możliwości pozyskania nowych użytkowników.
+
 \section{Wymagania funkcjonalne}
 
 \begin{table}[H]
@@ -271,30 +284,40 @@ W kolejnych podrozdziałach przedstawione zostały elementy specyfikacji, przygo
 \item System powinien posiadać modularną strukturę, pozwalającą na łatwą podmianę np. frontendu
 \end{itemize}
 
-\section{Aktorzy i~charakterystyka użytkowników}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth, keepaspectratio=true]{images/Strony_cele.png}
-	\caption{Aktorzy i~charakterystyka użytkowników}
-\end{figure}
+\newpage
+
 \section{Struktura programowa}
+
+Rysunek \ref{fig:modules} przedstawia strukturę modułów systemu RevCommunity.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.9]{images/modules.png}
 	\caption{Struktura programowa}
+	\label{fig:modules}
 \end{figure}
+
+Głównymi elementami aplikacji są moduły społecznościowy i administracyjny. Pierwszy z nich odpowiedzialny jest za dostarczanie informacji o produktach, także tych pochodzących z zewnętrznych źródeł, ale również za określanie wiarygodności użytkowników serwisu. Moduł administracyjny umożliwia konfigurację i zarządzanie aplikacją. 
+\newpage
 \section{Architektura systemu}
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{images/architektura.jpg}
+	\includegraphics[width=\textwidth]{images/architektura.jpg}
 	\caption{Architektura systemu}
+	\label{fig:architektura}
 \end{figure}
+Rysunek \ref{fig:architektura} przedstawia schemat architektury systemu RevCommunity. Dostęp do systemu realizowany jest przez aplikację mobilną lub przeglądarkę internetową. Osobny interfejs, dostępny tylko dla grupy administratorów, stanowi panel administracyjny. System przechowuje dane o użytkownikach, recenzjach i produktach, które mogą zostać zaimportowane z zewnętrznych serwisów przy wykorzystaniu modułu importu. 
+
 \newpage
 \section{Warstwy implementacyjne}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.9]{images/warstwy.png}
 	\caption{Warstwy implementacyjne}
+	\label{fig:warstwy}
 \end{figure}
-\newpage
 
+Rysunek \ref{fig:warstwy} przedstawia warstwy implementacyjne systemu RevCommunity wraz z użytymi technologiami. Warstwa prezentacji zrealizowana została przy wykorzystaniu HTML5, Less i bibliotek języka JavaScript, a komunikację z warstwą biznesową zorganizowano zgodnie z wzorcem REST. Warstwa biznesowa, udostępniająca funkcje pozwalające zarządzać stanem systemu, zrealizowana została przy wykorzystaniu szablonu Spring. W celu zapewnienia bezpieczeństwa wykorzystano Spring Security, natomiast szablon Spring Data wraz z bazą danych Neo4j tworzą warstwę dostępu do danych.
+
+\newpage
