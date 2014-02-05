@@ -1,6 +1,6 @@
 \chapter{Część kliencka aplikacji}
 
-Część kliencka naszej aplikacji została oparta o~javascriptowy framwork Ext JS. Jest to rozbudowany pakiet do tworzenia nowoczesnych aplikacji internetowych. Udostępnia funkcje do zarządzania elementami drzewa DOM, oraz szereg własnych komponentów graficznych tj. panele, tabelki, formularze etc. Biblioteka posiada również szerokie wsparcie dla technologii AJAX. Ext JS został stworzony z~myślą o~tworzeniu rozbudowanych aplikacji i~dlatego twórcy pomyśleli o~architekturze, która pozwoli w~naturalny i~logiczny sposób zorganizować kod programu. Struktura aplikacji opiera się o~schemat MVC. Twórcy Ext JS zalecają pewien schemat hierarchii katalogów uwzględniający podział projektu na warstwy. Przykład organizacji aplikacji:
+Część kliencka aplikacji RevCommunity została oparta o~javascriptowy framwork Ext JS. Jest to rozbudowany pakiet do tworzenia nowoczesnych aplikacji internetowych. Udostępnia funkcje do zarządzania elementami drzewa DOM, oraz szereg własnych komponentów graficznych tj. panele, tabelki, formularze etc. Biblioteka posiada również szerokie wsparcie dla technologii AJAX. Ext JS został stworzony z~myślą o~tworzeniu rozbudowanych aplikacji i~dlatego twórcy pomyśleli o~architekturze, która pozwoli w~naturalny i~logiczny sposób zorganizować kod programu. Struktura aplikacji opiera się o~schemat MVC. Twórcy Ext JS zalecają pewien schemat hierarchii katalogów uwzględniający podział projektu na warstwy. Przykład organizacji aplikacji:
 
 \begin{figure}[H]
 	\centering
@@ -10,7 +10,7 @@ Część kliencka naszej aplikacji została oparta o~javascriptowy framwork Ext 
 
 \section{Warstwa modelu}
 
-Definiuje klasy będące odwzorowaniem klas języka Java, które otrzymujemy w~odpowiedzi od serwera. W klasach modelu wykonujemy konwersję surowych danych do czytelnego formatu jeżeli jest taka potrzeba. Na tym poziomie możemy również wprowadzić walidację pól. Ext JS wspiera architekturę REST dzięki temu w~klasach modelu podając adres URL do zasobów otrzymamy gotowe funkcje zapisu, odczytu, modyfikacji i~usuwania danych. Przeanalizujmy przykład z~naszego projektu:
+Definiuje klasy będące odwzorowaniem klas języka Java, które aplikacja otrzyma w~odpowiedzi od serwera. W klasach modelu odbywa się konwersja surowych danych do czytelnego formatu. Na tym poziomie można również wprowadzić walidację pól. Ext JS wspiera architekturę REST dzięki temu w~klasach modelu podając adres URL do zasobów, biblioteka udostępni standardowe funkcje zapisu, odczytu, modyfikacji i~usuwania danych. Poniżej przeanalizowany zostanie przykład z~projektu RevCommunity:
 
 \begin{figure}[H]
 	\centering
@@ -18,7 +18,7 @@ Definiuje klasy będące odwzorowaniem klas języka Java, które otrzymujemy w~o
 	\caption{Przykład definicji modelu w~Ext JS}
 \end{figure}
 
-Powyższy kod implementuje klasę modelu Category. Dzięki definicji obiektu proxy zarządzanie naszymi danymi staje się banalnie proste. Przykładowo w~celu zapisania nowej kategorii wystarczy:
+Powyższy kod implementuje klasę modelu Category. Dzięki definicji obiektu proxy zarządzanie danymi staje się banalnie proste. Przykładowo w~celu zapisania nowej kategorii wystarczy:
 
 \begin{figure}[H]
 	\centering
@@ -26,15 +26,15 @@ Powyższy kod implementuje klasę modelu Category. Dzięki definicji obiektu pro
 	\caption{Zapis obiektu poprzez klasę modelu}
 \end{figure}
 
-Jeżeli wykonamy metodę save na obiekcie, który posiada już przypisany identyfikator(w naszym przypadku pole nodeId), to metodą zapytania będzie PUT.
-Do dyspozycji mamy również metody destroy(usuwanie elementu), oraz load(pobieranie elemntu).
+Jeżeli wykonana zostanie metoda save na obiekcie, który posiada już przypisany identyfikator(w tym przypadku pole nodeId), to metodą zapytania będzie PUT.
+Do dyspozycji są również metody destroy(usuwanie elementu), oraz load(pobieranie elementu).
 
-Kolejnym elementem zaliczającym się do tej warstwy są klasy Store służące do zarządzania grupami obiektów. Wykorzystuje się je przy ładowaniu danych do komponentów np. tabel. 
+Kolejnym elementem zaliczającym się do tej warstwy są klasy Store, służące do zarządzania grupami obiektów. Wykorzystuje się je przy ładowaniu danych do komponentów np. tabel. 
 Klasy Store pozwalają również filtrować i~sortować dane.
 
 \section{Warstwa widoku}
 
-Na widok aplikacji składają się komponenty graficzne tj. panele, tabele, drzewa i~formularze. Biblioteka pozwala nam rozszerzać komponenty graficzne tworząc własne, dzięki temu możemy je dostosować do własnych potrzeb i~wykorzystywać w~wielu miejscach(również w~innych aplikacjach). Bardzo przydatnym elementem Ext JS jest mechanizm szablonów(Ext.XTemplate). Pozwala on tworzyć wygląd komponentów z~wykorzystaniem języka HTML i~specjalnych znaczników framework'a Ext JS. Zazwyczaj szablony służą do definicji wyglądu list elementów. Komponent, w~którym używamy szablonu wiążemy z~konkretnym modelem. Gdy spróbujemy załadować dane do komponentu model wywoła odpowiednie zapytanie do serwera w~celu pobrania danych. Następnie zwrócona kolekcja zostanie przetworzona przez szablon. W szablonie możemy odwoływać się do pól modelu, iterować po kolekcjach elementów, oraz wykorzystywać warunki logiczne. Spójrzmy na prosty przykład szablonu listy subskrybowanych użytkowników:
+Na widok aplikacji składają się komponenty graficzne tj. panele, tabele, drzewa i~formularze. Biblioteka pozwala rozszerzać komponenty graficzne tworząc nowe, dzięki temu można je dostosować do własnych potrzeb i~wykorzystywać w~wielu miejscach(również w~innych aplikacjach). Bardzo przydatnym elementem Ext JS jest mechanizm szablonów(Ext.XTemplate). Pozwala on tworzyć wygląd komponentów z~wykorzystaniem języka HTML i~specjalnych znaczników framework'a Ext JS. Zazwyczaj szablony służą do definicji wyglądu list elementów. Komponent, w~którym używany jest szablon wiązany jest z~konkretnym modelem. Po próbie załadowania danych do komponentu, model wywoła odpowiednie zapytanie do serwera, w~celu pobrania danych. Następnie zwrócona kolekcja zostanie przetworzona przez szablon. W szablonie można odwoływać się do pól modelu, iterować po kolekcjach elementów, oraz wykorzystywać warunki logiczne. Poniżej prosty przykład szablonu listy subskrybowanych użytkowników:
  
 \begin{figure}[H]
 	\centering
@@ -42,14 +42,17 @@ Na widok aplikacji składają się komponenty graficzne tj. panele, tabele, drze
 	\caption{Szablon listy subskrybowanych użytkowników}
 \end{figure}
 
-Widok naszego komponentu w~całości definiuje powyższy szablon. Zaczynamy od wstawienia nagłówka "Subskrypcje" jako zwykły paragraf HTML. Niżej widzimy znacznik 'tpl', który udostępnia rozszerzenia szablonów. W tym przypadku będziemy iterować po kolekcji elementów załadowanej do komponentu. Następnie mamy definicje elementów HTML zawierających znaczniki odwołujące się do pól modelu. Jednym z~pól modelu jest obiekt user. Możemy odwoływać się do jego właściwości poprzez znak '.'. W połączeniu z~definicją stylów CSS otrzymujemy następujący efekt:
-
+Widok komponentu w~całości definiuje powyższy szablon. Na początku znajduje się nagłówek "Subskrypcje" jako zwykły paragraf HTML. Niżej znacznik 'tpl', który udostępnia rozszerzenia szablonów. Atrybut 'for' pozwala iterować po kolekcji elementów załadowanej do komponentu. Następnie zdefiniowano elementy HTML zawierające znaczniki odwołujące się do pól modelu. Jednym z~atrybutów modelu jest obiekt user. Znak '.' pozwala odwołać się do jego właściwości. W połączeniu z~definicją stylów CSS otrzymano następujący efekt:
  
-
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/subs.png}
+	\caption{Widok listy subskrypcji}
+\end{figure}
 
 \section{Warstwa kontrolerów}
 
-Aby nasza aplikacja zaczęła "żyć" musimy zdefiniować zachodzące w~nie zdarzenia i~ich obsługę. Do tego służą kontrolery. Są to klasy w~których umieszczamy instrukcję w~typu: gdy na komponencie ... wydarzy się ... wykonaj ... . Przykładowo w~kontrolerach umieszczamy obsługę kliknięć przycisków, zdarzeń załadowania danych, lub edycji pól formularzy. Ciekawy jest sposób wiązania komponentu z~funkcją obsługi zdarzenia. Pierwszą istotną rzeczą, którą musimy wykonać to zidentyfikowanie komponentu dla którego będziemy definiować zdarzenie. Do tego celu wykorzystujemy mechanizm Ext Js - ComponentQuery. Jest to język zapytań pozwalający na wyszukiwanie komponentów na podstawie aliasów, identyfikatorów, powiązań z~innymi komponentami, oraz wartości ich atrybutów. Każda klasa powinna posiadać unikalny w~ramach aplikacji alias. Alias ten upraszcza tworzenie obiektów danej klasy(nie musimy podawać pełnej nazwy klasy), oraz znacznie ułatwia tworzenie zapytań. Spójrzmy na przykład: 
+Aby aplikacja zaczęła "żyć", należy zdefiniować zachodzące w~niej zdarzenia i~ich obsługę. Do tego służą kontrolery. Są to klasy zawierające instrukcje typu: gdy na komponencie ... wydarzy się ... wykonaj ... . Przykładowo w~kontrolerach umieszczona zostaje obsługa kliknięć przycisków, zdarzeń załadowania danych, lub edycji pól formularzy. Ciekawy jest sposób wiązania komponentu z~funkcją obsługi zdarzenia. Pierwszą istotną rzeczą, którą należy wykonać jest zidentyfikowanie komponentu dla, którego definiowane będzie zdarzenie. Do tego celu posłuży mechanizm Ext Js - ComponentQuery. Jest to język zapytań pozwalający na wyszukiwanie komponentów na podstawie aliasów, identyfikatorów, powiązań z~innymi komponentami, oraz wartości ich atrybutów. Każda klasa powinna posiadać unikalny w~ramach aplikacji alias. Alias ten upraszcza tworzenie obiektów danej klasy(nie trzeba podawać pełnej nazwy klasy), oraz znacznie ułatwia tworzenie zapytań. Poniższy przykład przedstawia proste zapytanie: 
 
 \begin{figure}[H]
 	\centering
@@ -61,21 +64,20 @@ Zapytanie zostanie przetworzone w~następujący sposób:
 
 \begin{itemize}
 \item wyszukanie wszystkich komponentów na stronie posiadających alias 'revhtmleditor'
-\item wśród bezpośrednich dzieci znalezionych wcześniej komponentów wybierzemy tylko elementy typu toolbar ( gdyby nie znak '>' wyszukiwanie zagłębiałoby się rekurencyjnie)
-\item w~znalezionych toolbar'ach szukamy tylko przycisków, mających atrybut action ustawiony na wartość addVideoWin
+\item wśród bezpośrednich dzieci znalezionych wcześniej komponentów wybierane zostaną tylko elementy typu toolbar ( gdyby nie znak '>' wyszukiwanie zagłębiałoby się rekurencyjnie)
+\item w~znalezionych toolbar'ach wyszukiwane są tylko przyciski, mające atrybut action ustawiony na wartość addVideoWin
 \end{itemize}
 
 Tak elastyczny mechanizm wyszukiwania pozwala znaleźć każdy komponent.
-Kolejnym krokiem jest wybranie zdarzenia dla znalezionego komponentu. Ext Js określił dla każdego komponentu wyczerpującą listę dostępnych zdarzeń. Naszym zadaniem jest ich przypisanie do funkcji javascriptowych i~implementacji obsługi.
+Kolejnym krokiem jest wybranie zdarzenia dla znalezionego komponentu. Ext Js określa dla każdego komponentu wyczerpującą listę dostępnych zdarzeń. Zadaniem programisty jest ich przypisanie do funkcji javascriptowych i~implementacji obsługi.
 
-Naszym rozszerzeniem powyższej architektury jest dodanie warstwy usług, której zadanie jest analogiczne do jej serwerowego odpowiednika. Stworzenie klas usług po stronie klienta miało na celu wyciągniecie implementacji z~klas kontrolerów po to, aby lepiej zorganizować kod i~umożliwić korzystanie z~przydatnych funkcji w~wielu miejscach. Pamiętajmy, że kontrolery są mocno związane z~komponentami, natomiast klasy usług są podzielone według obszaru, którego dotyczą np. produktów, recenzji. Dlatego kontrolery zajmują się przetworzeniem danych do odpowiedniego formatu wymaganego przez klasy usług, nie implementują bezpośrednio żadnych operacji.
-
+Rozszerzeniem powyższej architektury jest dodanie warstwy usług, której zadanie jest analogiczne do jej serwerowego odpowiednika. Stworzenie klas usług po stronie klienta miało na celu wyciągniecie implementacji z~kontrolerów po to, aby lepiej zorganizować kod i~umożliwić korzystanie z~przydatnych funkcji w~wielu miejscach. Uwzględniając fakt, że kontrolery są mocno związane z~komponentami, natomiast klasy usług są podzielone według obszaru, którego dotyczą np. produktów, czy recenzji. Dlatego kontrolery zajmują się przetworzeniem danych do odpowiedniego formatu wymaganego przez klasy usług, nie implementują bezpośrednio żadnych operacji.
 
 
 
 \section{Dynamiczne style CSS}
-W projekcie do opisu formy prezentacji widoku strony klienckiej użyto dynamicznych arkuszy stylów – LESS (ang. \textit{Leaner CSS}). Głównym zadaniem LESS jest rozszerzenie możliwości CSS (ang. \textit{Cascading Style Sheets}) między innymi o~takie elementy jak możliwość definiowania zmiennych i~funkcji, łatwe zagnieżdżanie selektorów czy proste operacje. Wszystko to zostaje później podczas ładowania strony przekompilowane na zwykły kod CSS, tak by był on zrozumiały dla przeglądarek. CSS czyli kaskadowy arkusz styli pozwala dodać graficzny układ do strony internetowej. Określają one wygląd różnych elementów HTML znajdujących się na danej stronie internetowej. 
-LESS ma przewagę nad CSS, ponieważ zmienne pozwalają na zdefiniowanie wartości na przykład koloru czy szerokości w~jednym miejscu, które następnie można wykorzystać w~obrębie całego arkusza stylów. Umożliwia to globalne zmiany poprzez modyfikację jednej linijki kodu. Jest to bardzo wygodne rozwiązanie. 
+W projekcie do opisu formy prezentacji widoku strony klienckiej użyto dynamicznych arkuszy stylów – LESS (ang. \textit{Leaner CSS}). Głównym zadaniem LESS jest rozszerzenie możliwości CSS (ang. \textit{Cascading Style Sheets}) między innymi o~takie elementy, jak możliwość definiowania zmiennych i~funkcji, łatwe zagnieżdżanie selektorów czy proste operacje. Wszystko to zostaje później podczas ładowania strony przekompilowane na zwykły kod CSS, tak by był on zrozumiały dla przeglądarek. CSS czyli kaskadowy arkusz stylów pozwala dodać graficzny układ do strony internetowej. Określają one wygląd różnych elementów HTML znajdujących się na danej stronie internetowej. 
+LESS ma przewagę nad CSS, ponieważ zmienne pozwalają na zdefiniowanie wartości, na przykład koloru czy szerokości w~jednym miejscu, które następnie można wykorzystać w~obrębie całego arkusza stylów. Umożliwia to globalne zmiany poprzez modyfikację jednej linijki kodu. Jest to bardzo wygodne rozwiązanie. 
 
 \begin{figure}[h]
 	\centering
@@ -83,8 +85,8 @@ LESS ma przewagę nad CSS, ponieważ zmienne pozwalają na zdefiniowanie wartoś
 	\caption{Przykładowy kod LESS i~wygenerowany z~niego kod CSS}
 \end{figure}
 \paragraph{}
-W zwykłym pliku CSS, gdy jest potrzeba zmiany na przykład jakiegoś koloru na inny, trzeba ręcznie tą wartość zmienić w~każdym miejscu arkusza stylów, w~którym się pojawia \cite{cssBook}. Jest to czasochłonne, dlatego przy budowie projektu zrezygnowano z~tego rozwiązania na rzecz LESS. 
-W dynamicznych arkuszach styli można tworzyć również tak zwane „domieszki”. Domieszki to inaczej dziedziczenie przez dopisanie wartości do wszystkich właściwości danej klasy w~innej klasie, poprzez wykorzystanie nazwy klasy jako jednej z~wartości innej klasy. Zasada działania jest podoba do zmiennych, przy czym domieszki dotyczą całej konkretnej klasy. Domieszki mogą również działać jak funkcje i~przyjmować argumenty, tak jak w~poniższym przykładzie.
+W zwykłym pliku CSS, gdy jest potrzeba zmiany na przykład jakiegoś koloru na inny, trzeba ręcznie tę wartość zmienić w~każdym miejscu arkusza stylów, w~którym się pojawia \cite{cssBook}. Jest to czasochłonne, dlatego przy budowie projektu zrezygnowano z~tego rozwiązania na rzecz LESS. 
+W dynamicznych arkuszach stylów można tworzyć również tak zwane „domieszki”. Domieszki to inaczej dziedziczenie przez dopisanie wartości do wszystkich właściwości danej klasy w~innej klasie, poprzez wykorzystanie nazwy klasy jako jednej z~wartości innej klasy. Zasada działania jest podoba do zmiennych, przy czym domieszki dotyczą całej konkretnej klasy. Domieszki mogą również działać jak funkcje i~przyjmować argumenty, tak jak w~poniższym przykładzie.
 
 \begin{figure}[h]
 	\centering
@@ -93,7 +95,7 @@ W dynamicznych arkuszach styli można tworzyć również tak zwane „domieszki�
 \end{figure}
 \paragraph{}
 
-Dynamiczny arkusz styli  będąc rozszerzeniem kaskadowego arkusza styli jest z~nim zarówno kompatybilny wstecz jak i~korzysta z~jego składni w~czasie budowy nowych struktur leksykalnych. To sprawia, że nauka LESS jest prosta.
+Dynamiczny arkusz stylów  będąc rozszerzeniem kaskadowego arkusza stylów jest z~nim zarówno kompatybilny wstecz, jak i~korzysta z~jego składni w~czasie budowy nowych struktur leksykalnych. To sprawia, że nauka LESS jest prosta.
 W projekcie kompilacja plików LESS do plików CSS następuje wraz z~restartem serwera, dzięki czemu ten zabieg nie obciąża użytkowników. \cite{LESS}
 
 
@@ -127,14 +129,14 @@ Najważniejsze zastosowania techniki AJAX w~aplikacji RevCommunity:
 
 Warto także zwrócić uwagę na wady stosowania techniki AJAX. Najważniejszą z~nich jest porzucenie tradycyjnego schematu przeglądania stron z~wykorzystaniem przycisków ,,wstecz'' i~,,dalej'' w~oknie przeglądarki. Wywołanie akcji powodującej modyfikację części zawartości strony nie modyfikuje adresu URL i~nie jest rejestrowane przez mechanizm historii przeglądarki. Dodatkowo powoduje to, że poszczególne widoki aplikacji, takie jak szczegóły produktu czy lista produktów nie są dostępne pod określonym adresem URL. Pozostaje on niezmieniony przez cały cykl życia aplikacji.\cite{jsadv}
 
-Wspomniany problem można jednak rozwiązać przy wykorzystaniu dodatkowych narzędzi. Jednym z~nich jest biblioteka Backbone.js umożliwiająca wykorzystanie alternatywnej metody zarządzania historią i~adresami url w~aplikacji internetowej wykorzystującej AJAX. Idea opiera się, na wykorzystaniu w~adresie url znaku \# (ang. hashtag), którego dodanie do istniejącego adresu nie powoduje przeładowania strony.\cite{urls} Obiekt Backbone.Router analizuje tekst znajdujący się za znakiem \# i~na podstawie zdefiniowanych przez programistę reguł wywołuje jedną z~zaimplementowanych funkcji. W systemie RevCommunity, funckje te zostały wykorzystane do sterowania widokami aplikacji.\cite{backbone}
+Wspomniany problem można jednak rozwiązać przy wykorzystaniu dodatkowych narzędzi. Jednym z~nich jest biblioteka Backbone.js umożliwiająca wykorzystanie alternatywnej metody zarządzania historią i~adresami url w~aplikacji internetowej wykorzystującej AJAX. Idea opiera się, na wykorzystaniu w~adresie url znaku \# (ang. hashtag), którego dodanie do istniejącego adresu nie powoduje przeładowania strony.\cite{urls} Obiekt Backbone.Router analizuje tekst znajdujący się za znakiem \# i~na podstawie zdefiniowanych przez programistę reguł wywołuje jedną z~zaimplementowanych funkcji. W systemie RevCommunity, funkcje te zostały wykorzystane do sterowania widokami aplikacji.\cite{backbone}
 
 Przykłady reguł routingu w~aplikacji RevCommunity:
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{images/routes.png}
-	\caption{Przykłady reguł routingu w~aplikacji revCommunity}
+	\caption{Przykłady reguł routingu w~aplikacji RevCommunity}
 \end{figure}
 
 Każda reguła zbudowana jest według schematu [wzorzec] : [nazwa\_funkcji]. W momencie zmiany adresu url w~przeglądarce, pobierana jest jego część, znajdująca się za znakiem \textbf{\#}, która następnie poddawana jest próbie dopasowania do kolejnych wzorców. W przypadku udanego przypasowania, wywoływana jest funkcja o~nazwie podanej w~drugiej części reguły.
