@@ -4,7 +4,7 @@
 
 Przedstawiona w~rozdziale drugim koncepcja średniej Bayesa została wykorzystana do stworzenia wzoru, pozwalającego obliczyć przydatność recenzji. Dzięki niej użytkownik może w~łatwy sposób odfiltrować treści ocenione przez innych użytkowników jako nieprzydatne i~zapoznać się z~rzetelną recenzją interesującego go produktu. System umożliwia bowiem sortowanie recenzji wg ich przydatności. Własność ta budowana jest przede wszystkim na podstawie głosów oddanych przez użytkowników systemu, którzy zapoznając się z~recenzją, mają możliwość oznaczenia jej jako przydatna lub nie.
 
-Nie jest to jednak jedyne zastosowanie przydatności recenzji w~systemie RevCommunity. Ma ona bowiem także wpływ na wagę oceny recenzji w~ostatecznej ocenie produktu. Każdy z~produktów w~systemie może posiadać wiele recenzji, a~każda z~nich zawiera subiektywną ocenę opisywanego produktu nadaną przez jej autora. Obliczanie łącznej oceny produktu jako średniej arytmetycznej ocen wynikających z~recenzji może prowadzić do uzyskania oceny, która nie oddaje we właściwy sposób faktycznej wartości produktu. Możliwa jest bowiem sytuacja, w~której produkt zostanie oceniony przez nierzetelnych użytkowników, którzy z~różnych przyczyn, np. będąc pracownikami konkurencyjnego producenta, będą zabiegali o~celowe zaniżenie oceny produktu. Aby uniknąć wspomnianej sytuacji, w~celu obliczenia ostatecznej oceny, zastosowano średnią ważoną ocen pochodzących z~recenzji danego produktu, gdzie wagami są przydatności recenzji. Dzięki temu wiarygodne recenzje, napisane przez rzetelnych użytkowników, mają większą wagę, a~co za tym idzie, większy wpływ na ocenę produktu.
+Nie jest to jednak jedyne zastosowanie przydatności recenzji w~systemie\linebreak RevCommunity. Ma ona bowiem także wpływ na wagę oceny recenzji w~ostatecznej ocenie produktu. Każdy z~produktów w~systemie może posiadać wiele recenzji, a~każda z~nich zawiera subiektywną ocenę opisywanego produktu nadaną przez jej autora. Obliczanie łącznej oceny produktu jako średniej arytmetycznej ocen wynikających z~recenzji może prowadzić do uzyskania oceny, która nie oddaje we właściwy sposób faktycznej wartości produktu. Możliwa jest bowiem sytuacja, w~której produkt zostanie oceniony przez nierzetelnych użytkowników, którzy z~różnych przyczyn, np. będąc pracownikami konkurencyjnego producenta, będą zabiegali o~celowe zaniżenie oceny produktu. Aby uniknąć wspomnianej sytuacji, w~celu obliczenia ostatecznej oceny, zastosowano średnią ważoną ocen pochodzących z~recenzji danego produktu, gdzie wagami są przydatności recenzji. Dzięki temu wiarygodne recenzje, napisane przez rzetelnych użytkowników, mają większą wagę, a~co za tym idzie, większy wpływ na ocenę produktu.
 
 Wzór pozwalający na obliczenie przydatności recenzji R ma następującą postać:
 
@@ -37,7 +37,7 @@ Warto zauważyć, że przytoczony wzór można łatwo zredukować to prostszej p
 \bar{x_{R}}=\frac{w_{m}Cm+w_{g}{p}+w_{a}p_{a}}{w_{m}C+w_{g}(p+n)+w_{a}(p_{a}+n_{a})}*100\%
 \end{equation}\\
 
-Uproszczona w~ten sposób formuła została zaimplementowana w~aplikacji RevCommunity.
+Uproszczona w~ten sposób formuła została zaimplementowana w~aplikacji\linebreak RevCommunity.
 
 Kolejną wartością, której obliczanie bazuje na koncepcji średniej Bayesa, jest ranga recenzenta. Dzięki niej użytkownik uzyskuje poglądową informację o~ogólnej jakości wszystkich recenzji napisanych przez użytkownika. Wartość ta obliczana jest według przedstawionego poniżej wzoru:
 
@@ -79,7 +79,7 @@ Wyliczona w~ten sposób ocena użytkownika mapowana jest na jedną z~dostępnych
 
 \subsection{Przygotowanie danych i~symulacja}
 
-W celu weryfikacji stworzonej koncepcji algorytmu rankingowego zbudowana została aplikacja symulująca proces oceniania recenzji. Model danych aplikacji testowej jest uproszony względem systemu revCommunity i~obejmuje tylko użytkowników i~recenzje. 
+W celu weryfikacji stworzonej koncepcji algorytmu rankingowego zbudowana została aplikacja symulująca proces oceniania recenzji. Model danych aplikacji testowej jest uproszony względem systemu RevCommunity i~obejmuje tylko użytkowników i~recenzje. 
 
 Każdy z~użytkowników posiada zbiór recenzji swojego autorstwa, liczbę recenzji, które oceni w~trakcie symulacji, a~także wartość procentową określającą  domyślne prawdopodobieństwo otrzymania pozytywnego głosu przez recenzję jego autorstwa. Dodatkowo każdy z~użytkowników może zostać oznaczony jako oszust, co spowoduje, że w~trakcie głosowania będzie oceniał dobre recenzje jako złe i~odwrotnie. Użytkownicy - oszuści mają za zadanie symulować obecnych w~realnym świecie użytkowników sponsorowanych.
 

@@ -1,6 +1,6 @@
 \chapter{Część serwerowa aplikacji}
 
-Niniejszy rozdział opisuje sposób implementacji części serwerowej projektu RevCommunity. Przedstawiona zostanie warstwowa architektura projektu. Następnie przechodząc przez poszczególne warstwy omówione zostaną technologie wykorzystane do realizacji tej części aplikacji. Przybliżone zostaną również najważniejsze elementy konfiguracji.
+Niniejszy rozdział opisuje sposób implementacji części serwerowej projektu\newline RevCommunity. Przedstawiona zostanie warstwowa architektura projektu. Następnie przechodząc przez poszczególne warstwy omówione zostaną technologie wykorzystane do realizacji tej części aplikacji. Przybliżone zostaną również najważniejsze elementy konfiguracji.
 
 \section{Architektura}
 W projekcie zastosowano architekturę warstwową opartą na trzech poziomach:
@@ -45,9 +45,9 @@ Kolejną przydaną funkcją Spring MVC jest bardzo szeroko konfigurowalne konwer
 \item @RequestBody - umożliwia mapowanie obiektu javascript na złożony obiekt Java. Wymaga odpowiedniego ustawienia nagłówków zapytania HTTP
 \end{itemize}
 
-Można również, jako argument, podać obiekt pewnej klasy bez żadnej adnotacji. W takim przypadku jeżeli nazwa pola tej klasy zgadza się z~nazwą parametru zapytania, to do tego pola wpisana zostanie wartość parametru. Bez umieszczania adnotacji można również podać pewne standardowe parametry np. HttpServletRequest, HttpServletResponse, czy HttpSession{cite{springmvcWww}.
+Można również, jako argument, podać obiekt pewnej klasy bez żadnej adnotacji. W takim przypadku jeżeli nazwa pola tej klasy zgadza się z~nazwą parametru zapytania, to do tego pola wpisana zostanie wartość parametru. Bez umieszczania adnotacji można również podać pewne standardowe parametry np. HttpServletRequest, HttpServletResponse, czy HttpSession\cite{springmvcWww}.
 
-W projekcie zastosowano wzorzec REST do stworzenia struktury mapowań żądań HTTP na metody odpowiednich klasy. Wzorzec ten wprowadza pojęcie zasobu, który możemy jednoznacznie zidentyfikować poprzez powiązany z~nim identyfikator. To podejście różni się od klasycznego tym, że parametry przekazujemy w~adresie URL, a~nie w~treści zapytania. Wzorzec narzuca pewne zasady konstruowania API umożliwiającego zarządzanie zasobami. Adres URL rozpoczyna się od identyfikatora grupy zasobów np. “/users” określa, że operacje dotyczą użytkowników. Duże znaczenie mają metody protokołu HTTP, ponieważ każda będzie oznaczać inną operację. Jeżeli nie podano identyfikatora konkretnego zasobu(np. ID użytkownika), czyli adres naszego zapytania to “/users”, to w~zależności od metody HTTP powinny wykonać się następujące operacje:
+W projekcie zastosowano wzorzec REST do stworzenia struktury mapowań żądań HTTP na metody odpowiednich klas. Wzorzec ten wprowadza pojęcie zasobu, który możemy jednoznacznie zidentyfikować poprzez powiązany z~nim identyfikator. To podejście różni się od klasycznego tym, że parametry przekazujemy w~adresie URL, a~nie w~treści zapytania. Wzorzec narzuca pewne zasady konstruowania API umożliwiającego zarządzanie zasobami. Adres URL rozpoczyna się od identyfikatora grupy zasobów np. “/users” określa, że operacje dotyczą użytkowników. Duże znaczenie mają metody protokołu HTTP, ponieważ każda będzie oznaczać inną operację. Jeżeli nie podano identyfikatora konkretnego zasobu(np. ID użytkownika), czyli adres naszego zapytania to “/users”, to w~zależności od metody HTTP powinny wykonać się następujące operacje:
 
 \begin{itemize}
 \item GET - pobiera listę wszystkich zasobów (np. listę użytkowników)
@@ -132,7 +132,7 @@ Stworzona aplikacja umożliwia import informacji o~kategoriach i~produktach z~ze
 	\caption{Diagram UML przedstawiający powiązanie między obiektami.}
 \end{figure}
 
-Pierwsza z~nich umożliwia import opisanych wcześniej informacji z~serwisu Allegro przy pomocy SOAP(ang. \textit{Simple Object Accesss Protocol}).SOAP jest protokołem umożliwiającym zdalne wykonywanie udostępnionych usług. Komunikacja polega na przesyłaniu pliku XML w~odpowiednim formacie, który może zawierać żądanie wykonania określonej usługi lub odpowiedź dotyczącą wykonanej usługi.\cite{soap} \indent Druga natomiast do pozyskiwania informacji z~portalu nokaut.pl, wykorzystuje wzorzec REST(ang. \textit{Representational State Transfer}) oraz klucz autoryzujący.
+Pierwsza z~nich umożliwia import opisanych wcześniej informacji z~serwisu Allegro przy pomocy SOAP(ang. \textit{Simple Object Accesss Protocol}). SOAP jest protokołem umożliwiającym zdalne wykonywanie udostępnionych usług. Komunikacja polega na przesyłaniu pliku XML w~odpowiednim formacie, który może zawierać żądanie wykonania określonej usługi lub odpowiedź dotyczącą wykonanej usługi.\cite{soap} \indent Druga natomiast do pozyskiwania informacji z~portalu nokaut.pl, wykorzystuje wzorzec REST(ang. \textit{Representational State Transfer}) oraz klucz autoryzujący.
 
 \subsection{API Allegro}
 API udostępnione przez Allegro, jest bardzo rozbudowane i~umożliwia pozyskanie wielu przydatnych informacji, np. drzewo kategorii, zestaw filtrów dla każdej z~kategorii oraz informacje o~wygranych aukcjach.
@@ -182,7 +182,7 @@ Model uprawnień został zdefiniowany w~pliku konfiguracyjnym SpringSecurity. Za
 \item Administratorów
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=1.00\textwidth]{images/hierarchia_uprawnien.png}
 	\caption{Hierarchia uprawnień pomiędzy użytkownikami.}
