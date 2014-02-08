@@ -1,0 +1,73 @@
+
+
+MATCH (n) RETURN count(*)
+
+START user=node:users(userName="jkowalski")
+MATH (user)-[:WROTE]->(review)
+RETURN review ORDER BY review.title
+
+<servlet>
+	<servlet-name>mvc-dispatcher</servlet-name>
+	<servlet-class>
+		org.springframework.web.servlet.DispatcherServlet
+	</servlet-class>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>mvc-dispatcher</servlet-name>
+	<url-pattern>/rest/*</url-pattern>
+</servlet-mapping>
+
+Ext.define('RevCommunity.model.Category', {
+    extend: 'Ext.data.Model',
+    fields: [
+		'name',
+		'nodeId',
+		'filters'
+	 ],
+     idProperty:'nodeId',
+     proxy: {
+        type: 'rest',
+        url : 'rest/categories'
+    }
+});
+
+User findByUserName( String userName );
+
+List<User> findDistinctByUserNameOrLastNameIgnoreCaseDesc( Stirng userName,
+														   String lastName);
+														   
+{
+    extend: 'Ext.data.Model',
+    fields: [
+          'channel',
+          'notification',
+          {
+			name:'product',
+			mapping:'channel.channelProduct'
+		  }         
+    ],
+    idProperty:'extid',
+    proxy: {
+        type: 'rest',
+        url : 'rest/subscriptions/products/notifications'
+    }
+}
+
+
+@Query( "START parent=node({0}) MATCH parent-[:CONTAINS]->children"
+	+ "RETURN children" )
+List<AbstractCategory> getChildren( AbstractCategory parent );
+
+var category = Ext.create('Category',{name:'Komputery'});
+
+category.save();//wywołanie zapytania metodą POST pod adres 'rest/categories'
+//treść zapytania to definicja obiektu kategorii w formacie JSON
+
+<p class="rev-header">Subskrypcje</p>
+<tpl for=".">
+    <div class="rev-user-subscription-item">
+      <img src="{user.image}" width="18"/><span>{user.fullName} ({newNotifications})</span>
+    </div>
+</tpl>
