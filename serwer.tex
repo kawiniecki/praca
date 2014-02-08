@@ -31,7 +31,7 @@ Do implementacji warstwy komunikacji wykorzystano Spring MVC. Jest to element Sp
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{images/dispatcher.png}
+	\includegraphics{images/dispatcher.png}
 	\caption{Konfiguracja DispatcherServlet}
 \end{figure}
 
@@ -98,6 +98,7 @@ Gdy obiekty bazodanowe zostaną zamodelowane, przydatne staną się elementy umo
 \begin{figure}[H]
 	\centering
 	\includegraphics{images/findbyusername.png}
+	\caption{Prosta metoda wyszukująca}
 \end{figure}
 
 
@@ -107,6 +108,7 @@ Nazwy metod mogą wykorzystywać bardziej złożone wzorce, pozwalające na zdef
 \begin{figure}[H]
 	\centering
 	\includegraphics{images/findlong.png}
+	\caption{Rozbudowana metoda wyszukująca}
 \end{figure}
 
 
@@ -118,6 +120,7 @@ Przejdźmy do przykładu:
 \begin{figure}[H]
 	\centering
 	\includegraphics{images/query.png}
+	\caption{Zastosowanie adnotacji @Query}
 \end{figure}
 
 Jako parametr podano kategorię, dla której należy znaleźć kategorie podrzędne(dzieci). Podany argument jest miejscem zaczepienia w~grafie, od którego rozpocznie się dopasowanie. Klauzula MATCH odpowiada za definicje relacji między węzłami biorącymi udział w~dopasowaniu. Słowo kluczowe RETURN określa, który ze zdefiniowanych elementów zostanie zwrócony jako wynik zapytania. Najciekawsza tutaj jest klauzula MATCH. To ona wprowadza abstrakcję grafu i~odróżnia zapytanie od np. języka SQL. Fragment zawarty między MATCH, a~RETURN określa wzór dopasowania między węzłem parent(podanym jako parametr) a~węzłami połączonymi z~nim jednokierunkową wychodzącą relacją o~nazwie CONTAINS. 

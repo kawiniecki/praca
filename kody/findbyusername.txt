@@ -1,0 +1,2 @@
+User findByUserName( String userName );
+

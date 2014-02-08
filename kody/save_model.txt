@@ -1,0 +1,6 @@
+var category = Ext.create('Category',{name:'Komputery'});
+
+//wywołanie zapytania metodą POST pod adres 'rest/categories'
+//treść zapytania to definicja obiektu kategorii w formacie JSON
+category.save();
+

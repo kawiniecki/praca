@@ -1,0 +1,4 @@
+List<User> findDistinctByUserNameOrLastNameIgnoreCaseDesc(
+						Stirng userName, String lastName);
+														   
+														   
