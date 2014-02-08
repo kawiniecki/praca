@@ -31,7 +31,7 @@ Ostatnim czynnikiem wpływającym na użyteczność recenzji jest ocena autora, 
 
 Wszystkim wspomnianym czynnikom składającym się na przydatność recenzji zostały dodatkowo przypisane wagi, tak aby można było kontrolować ich wpływ na obliczaną wartość.
 
-Warto zauważyć, że przytoczony wzór można łatwo zredukować to prostszej postaci:
+Warto zauważyć, że przytoczony wzór można łatwo zredukować do prostszej postaci:
 
 \begin{equation}\label{eq:przydatnosc}
 \bar{x_{R}}=\frac{w_{m}Cm+w_{g}{p}+w_{a}p_{a}}{w_{m}C+w_{g}(p+n)+w_{a}(p_{a}+n_{a})}*100\%
@@ -83,7 +83,7 @@ W celu weryfikacji stworzonej koncepcji algorytmu rankingowego zbudowana został
 
 Każdy z~użytkowników posiada zbiór recenzji swojego autorstwa, liczbę recenzji, które oceni w~trakcie symulacji, a~także wartość procentową określającą  domyślne prawdopodobieństwo otrzymania pozytywnego głosu przez recenzję jego autorstwa. Dodatkowo każdy z~użytkowników może zostać oznaczony jako oszust, co spowoduje, że w~trakcie głosowania będzie oceniał dobre recenzje jako złe i~odwrotnie. Użytkownicy - oszuści mają za zadanie symulować obecnych w~realnym świecie użytkowników sponsorowanych.
 
-Recenzje posiadają natomiast unikatowy identyfikator, liczbę uzyskanych głosów pozytywnych i~negatywnych, przydatność, autora, a~także prawdopodobieństwo otrzymania pozytywnego głosu, które jest liczbą losową z~zakresu [90\% x ; 110\% x], gdzie x to domyślne prawdopodobieństwo otrzymania pozytywnego głosu przypisane do autora recenzji. Należy dodatkowo zaznaczyć, że wylosowane prawdopodobieństwo jest zawsze liczbą z~zakresu [0;1]
+Recenzje posiadają natomiast unikatowy identyfikator, liczbę uzyskanych głosów pozytywnych i~negatywnych, przydatność, autora, a~także prawdopodobieństwo otrzymania pozytywnego głosu, które jest liczbą losową z~zakresu [90\% x ; 110\% x], gdzie x to domyślne prawdopodobieństwo otrzymania pozytywnego głosu, przypisane do autora recenzji. Należy dodatkowo zaznaczyć, że wylosowane prawdopodobieństwo jest zawsze liczbą z~zakresu [0;1]
 
 Ważną rolę w~programie testowym odgrywają także parametry pozwalające sterować przebiegiem symulacji. Wszystkie dostępne ustawienia deklarowane są w~klasie Parameters, która definiuje jednocześnie ich domyślne wartości. Na jej podstawie budowane są kolejne zbiory parametrów przydatne dla poszczególnych testów, nadpisujące tylko niezbędne wartości. Najważniejsze parametry, które można dostosować w~opisywanej aplikacji testowej to:
 
@@ -112,7 +112,7 @@ Pierwszy z~zaproponowanych testów umożliwia pełny podgląd systemu po przepro
 \item liczbę głosów pozytywnych,
 \item stosunek głosów pozytywnych do wszystkich,
 \item przydatność,
-\item błąd czyli różnica między przydatnością oczekiwaną a~uzyskaną, podniesiona do kwadratu.
+\item błąd, czyli różnica między przydatnością oczekiwaną a~uzyskaną, podniesiona do kwadratu.
 \end{itemize}
 
 Dane użytkowników reprezentowane są przez:
