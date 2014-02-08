@@ -1,0 +1,4 @@
+@Query( "START parent=node({0}) MATCH parent-[:CONTAINS]->children"
+	+ "RETURN children" )
+List<AbstractCategory> getChildren( AbstractCategory parent );
+

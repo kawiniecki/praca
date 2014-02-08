@@ -1,0 +1,17 @@
+Ext.define('RevCommunity.model.Category', {
+    extend: 'Ext.data.Model',
+    fields: [
+		'name',
+		'nodeId',
+		'filters'
+	 ],
+     idProperty:'nodeId',
+     proxy: {
+        type: 'rest',
+        url : 'rest/categories'
+    }
+});
+
+
+
+
